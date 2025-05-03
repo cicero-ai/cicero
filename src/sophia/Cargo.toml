@@ -1,0 +1,23 @@
+[package]
+name = "cicero-sophia"
+description = "High-performance NLU (natural language understanding) engine built in Rust for speed, accuracy, and privacy. "
+version = "0.6.0"
+edition = "2021"
+authors = ["Aquila Labs", "Matt Kolbuc"]
+homepage = "https://cicero.sh/sophia/"
+keywords = ["nlu", "natural-language", "chat", "nlp"]
+categories = ["text-processing"]
+readme = "README.md"
+license = "GPL-3.0"
+repository = "https://github.com/cicero-ai/cicero"
+
+[lib]
+name="sophia"
+
+[dependencies]
+bincode = "1.3.3"
+indexmap = { version = "2.2.6", features = ["serde"] }
+regex = "1.10.5"
+serde = { version = "^1.0.202", features = ["derive"] }
+
+

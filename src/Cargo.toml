@@ -1,0 +1,30 @@
+
+[workspace]
+members = [
+    #"cicero/client",
+    #"cicero/lib",
+    #"cicero/server",
+    #"evolve",
+    #"quadris",
+    #"sdk",
+    "sophia",
+#    "verax/lib",
+    #"plugins/core",
+    #"deps/atlas",
+    #"deps/falcon-cli",
+    #"deps/http",
+    #"deps/opus",
+    #"deps/parsex",
+    #"deps/sermo"
+]
+resolver = "2"
+
+[profile.release]
+strip="symbols"
+debug=true
+lto = true
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+
+

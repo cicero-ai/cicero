@@ -1,0 +1,8 @@
+
+# Keep lines longer for screen reader accessibility
+max_width = 100
+chain_width = 100
+
+
+
+
