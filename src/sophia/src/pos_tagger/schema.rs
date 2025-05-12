@@ -1,3 +1,8 @@
+// Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
+// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
+// See the full license at: https://cicero.sh/license.txt
+// Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
+
 use super::POSTag;
 use crate::vocab::f8::f8;
 use serde::{Deserialize, Serialize};
@@ -33,7 +38,7 @@ pub struct POSTaggerLayer<T: Score> {
 #[derive(Default, Serialize, Deserialize, Clone)]
 #[serde(bound = "T: Score")]
 pub struct POSTaggerScores<T: Score> {
-    pub exact_matches: POSTaggerExactMatchTrie,
+    pub exact_matches: HashMap<u32, (POSTag, T)>,
     pub bigrams: Vec<POSTaggerBigramScores<T>>,
 }
 
@@ -41,13 +46,6 @@ pub struct POSTaggerScores<T: Score> {
 #[derive(Default, Clone, Serialize, Deserialize)]
 #[serde(bound = "T: Score")]
 pub struct POSTaggerBigramScores<T: Score>(pub HashMap<u16, Vec<(POSTag, T)>>);
-
-/// A trie structure for exact match POS tagging, mapping character sequences to tags.
-#[derive(Default, Serialize, Deserialize, Clone)]
-pub struct POSTaggerExactMatchTrie {
-    pub tag: Option<POSTag>,
-    pub children: HashMap<i8, Box<POSTaggerExactMatchTrie>>,
-}
 
 impl<T: Score, S: Default + Hash + Eq + Serialize + for<'de> Deserialize<'de>> POSTagger<T, S> {
     /// Creates a new POSTagger instance with default values.
@@ -63,7 +61,7 @@ impl Score for f8 {}
 impl<T: Score> POSTaggerScores<T> {
     pub fn new(size: usize) -> Self {
         Self {
-            exact_matches: POSTaggerExactMatchTrie::default(),
+            exact_matches: HashMap::new(),
             bigrams: (0..size)
                 .map(|_| POSTaggerBigramScores::<T>::default())
                 .collect::<Vec<POSTaggerBigramScores<T>>>(),

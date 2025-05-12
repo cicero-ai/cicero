@@ -1,3 +1,8 @@
+// Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
+// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
+// See the full license at: https://cicero.sh/license.txt
+// Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
+
 use super::{POSTag, POSTagger, POSTaggerLayer, POSTaggerScores};
 use crate::tokenizer::TokenizedInput;
 use crate::vocab::f8::f8;
@@ -23,6 +28,7 @@ struct Buffer {
 /// Represents a resolved score for a word, including its position, assigned tag, maximum score, and score distribution for possible tags.
 #[derive(Default)]
 struct ResolvedScore {
+    pub is_exact: bool,
     pub position: usize,
     pub tag: POSTag,
     pub max_score: f32,
@@ -44,6 +50,7 @@ impl POSTagger<f8, i32> {
 
             // Resolve ambiguous word
             if let Some(layer) = self.tag2word.get(&output.tokens[x].index) {
+
                 let score = layer.resolve(&buffer);
                 buffer.tags.push(score.tag);
                 buffer.words.push(score);
@@ -114,6 +121,7 @@ impl POSTagger<f8, i32> {
             output.tokens[position] = correct;
         }
     }
+
 }
 
 impl POSTaggerLayer<f8> {
@@ -185,13 +193,32 @@ impl POSTaggerLayer<f8> {
 
     /// Resolves the POS tag for a word by calculating bigram scores from previous tags and selecting the highest-scoring tag.
     fn resolve(&self, buffer: &Buffer) -> ResolvedScore {
+
+        let mut res = ResolvedScore::new(buffer.tags.len());
+
+        if buffer.tags.len() >= 4 {
+            let quadgram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 4..]);
+            if let Some((tag, score)) = self.before.exact_matches.get(&quadgram_key) {
+                res.is_exact = true;
+                res.tag = *tag;
+                return res;
+            }
+        }
+        if buffer.tags.len() >= 3 {
+            let trigram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 3..]);
+            if let Some((tag, score)) = self.before.exact_matches.get(&trigram_key) {
+                res.is_exact = true;
+                res.tag = *tag;
+                return res;
+            }
+        }
+
         // Get bigram scores, if we have previous words
         let mut bigram_scores: HashMap<POSTag, f32> = HashMap::new();
         if !buffer.tags.is_empty() {
             let tags = buffer.tags.clone().into_iter().rev().take(8).collect::<Vec<POSTag>>();
             bigram_scores = self.before.calculate_bigram_score(&tags, &BEFORE_WEIGHTS)
         }
-        let mut res = ResolvedScore::new(buffer.tags.len());
 
         // Get highest score
         let (mut max_tag, mut max_score) = (POSTag::FW, 0.0);
@@ -216,6 +243,15 @@ impl POSTaggerLayer<f8> {
 
         res
     }
+
+    fn bit_pack_context(&self, context: &[POSTag]) -> u32 {
+        let mut key = 0u32;
+        for (i, tag) in context.iter().enumerate() {
+            key |= ((tag.to_u8() & 0x3F) as u32) << (6 * (context.len() - 1 - i));
+        }
+        key
+    }
+
 }
 
 impl POSTaggerScores<f8> {
@@ -225,6 +261,7 @@ impl POSTaggerScores<f8> {
         buffer: &Vec<POSTag>,
         weights: &[f32],
     ) -> HashMap<POSTag, f32> {
+
         // Initialize
         let mut scores: HashMap<POSTag, Vec<f32>> = HashMap::new();
 
@@ -249,7 +286,9 @@ impl POSTaggerScores<f8> {
         // Create results
         let mut res: HashMap<POSTag, f32> = HashMap::new();
         for (tag, scores_vec) in scores.iter() {
-            let score = scores_vec.clone().into_iter().sum::<f32>() / scores_vec.len() as f32;
+            let mut score = scores_vec.clone().into_iter().sum::<f32>() / scores_vec.len() as f32;
+            if tag.is_verb() { score *= 1.3; }
+
             res.insert(*tag, score);
         }
 
@@ -259,6 +298,11 @@ impl POSTaggerScores<f8> {
     fn verify_score(&self, word_x: usize, buffer: &Buffer) -> Option<POSTag> {
         if buffer.tags.len() < (buffer.words[word_x].position + 2) {
             return None;
+        }
+
+        // Exact match
+        if buffer.words[word_x].is_exact {
+            return Some(buffer.words[word_x].tag);
         }
 
         // Get next tags

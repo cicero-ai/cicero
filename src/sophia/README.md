@@ -9,8 +9,6 @@ High-performance NLU (natural language understanding) engine built in Rust for s
 
 ## Features
 
-* 
-
 **Core Capabilities**
 
 * Industry-leading vocabulary with 914,000 (full) or 145,000 (lite) words
@@ -24,6 +22,8 @@ High-performance NLU (natural language understanding) engine built in Rust for s
 * Lightweight deployment: Single 79MB (lite) or 177MB (full) data store
 * Zero external dependencies or API calls required
 * Privacy-focused with all processing done locally
+
+Github: https://github.com/cicero-ai/cicero/
 
 ## License
 

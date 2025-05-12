@@ -1,3 +1,8 @@
+// Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
+// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
+// See the full license at: https://cicero.sh/license.txt
+// Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
+
 use crate::error::Error;
 use crate::tokenizer::{Token, TokenizedInput};
 use serde::{Deserialize, Serialize};
