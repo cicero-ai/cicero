@@ -38,7 +38,7 @@ pub struct POSTaggerLayer<T: Score> {
 #[derive(Default, Serialize, Deserialize, Clone)]
 #[serde(bound = "T: Score")]
 pub struct POSTaggerScores<T: Score> {
-    pub exact_matches: HashMap<u32, (POSTag, T)>,
+    pub exact_matches: HashMap<u32, POSTag>,
     pub bigrams: Vec<POSTaggerBigramScores<T>>,
 }
 

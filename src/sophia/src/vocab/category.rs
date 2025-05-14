@@ -62,7 +62,7 @@ impl VocabCategoryDatabase {
             _ => return None,
         };
         let index = cat_index.index;
-        println!("Got index {}", index);
+
         // Get category
         let mut cat: VocabCategory = self.nodes.get(&index)?.clone();
         cat.pos = parts[0].to_string();
@@ -166,7 +166,7 @@ impl VocabCategoryDatabase {
 
     /// Retrieves the fully qualified names of a category's parent categories.
     pub fn get_fqn(&self, category: &VocabCategory) -> Vec<String> {
-        println!("FQN: {:?}", category.fqn);
+
         let mut names: Vec<String> = Vec::new();
         for parent_id in category.fqn.iter() {
             let parent_name: String = match self.nodes.get(parent_id) {

@@ -198,7 +198,7 @@ impl POSTaggerLayer<f8> {
 
         if buffer.tags.len() >= 4 {
             let quadgram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 4..]);
-            if let Some((tag, score)) = self.before.exact_matches.get(&quadgram_key) {
+            if let Some(tag) = self.before.exact_matches.get(&quadgram_key) {
                 res.is_exact = true;
                 res.tag = *tag;
                 return res;
@@ -206,7 +206,7 @@ impl POSTaggerLayer<f8> {
         }
         if buffer.tags.len() >= 3 {
             let trigram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 3..]);
-            if let Some((tag, score)) = self.before.exact_matches.get(&trigram_key) {
+            if let Some(tag) = self.before.exact_matches.get(&trigram_key) {
                 res.is_exact = true;
                 res.tag = *tag;
                 return res;
@@ -286,8 +286,8 @@ impl POSTaggerScores<f8> {
         // Create results
         let mut res: HashMap<POSTag, f32> = HashMap::new();
         for (tag, scores_vec) in scores.iter() {
-            let mut score = scores_vec.clone().into_iter().sum::<f32>() / scores_vec.len() as f32;
-            if tag.is_verb() { score *= 1.3; }
+            let score = scores_vec.clone().into_iter().sum::<f32>() / scores_vec.len() as f32;
+            //if tag.is_verb() { score *= 1.3; }
 
             res.insert(*tag, score);
         }

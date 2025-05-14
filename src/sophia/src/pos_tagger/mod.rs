@@ -3,14 +3,12 @@
 // See the full license at: https://cicero.sh/license.txt
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-pub use self::exact_match::POSTaggerExactMatchTrie;
 pub use self::pos_tag::POSTag;
 pub use self::schema::{
     POSTagger, POSTaggerBigramScores, POSTaggerLayer, POSTaggerScores,
     Score,
 };
 
-mod exact_match;
 mod pos_tag;
 mod schema;
 mod tagger;
