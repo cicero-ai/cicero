@@ -1,0 +1,1 @@
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/home/boxer/devel/cicero/cicero/share/verax/lib/target/debug/build/mime_guess-e535c907ba46321f/out/mime_types_generated.rs

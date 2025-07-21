@@ -1,0 +1,39 @@
+
+use rcgen::generate_simple_self_signed;
+use ring::rand;
+use ring::signature::{self, KeyPair, Ed25519KeyPair, Signature};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Generate a self-signed X.509 certificate
+    let subject_alt_names = vec!["example.com".to_string()];
+    let cert = generate_simple_self_signed(subject_alt_names)?;
+    println!("Generated Certificate: {}", cert.serialize_pem()?);
+
+    // Extract the private key from the certificate
+    let private_key_pem = cert.serialize_private_key_pem();
+    println!("Private Key: {}", private_key_pem);
+
+    // Load the private key into an Ed25519KeyPair
+    let private_key_der = cert.serialize_private_key_der();
+    let key_pair = Ed25519KeyPair::from_pkcs8(&private_key_der)?;
+
+    // Sign some data
+    let data = b"hello, world!";
+    let signature: Signature = key_pair.sign(data);
+
+    println!("Data: {:?}", data);
+    println!("Signature: {:?}", signature.as_ref());
+
+    // Verify the signature (for demonstration purposes)
+    let public_key = key_pair.public_key().as_ref();
+    let result = signature::UnparsedPublicKey::new(&signature::ED25519, public_key).verify(data, signature.as_ref());
+    
+    match result {
+        Ok(_) => println!("Signature verified successfully."),
+        Err(_) => println!("Failed to verify the signature."),
+    }
+
+    Ok(())
+}
+
+

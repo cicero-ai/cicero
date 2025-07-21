@@ -1,0 +1,30 @@
+[package]
+name = "atlas-http"
+version = "0.2.3"
+authors = ["Matt Dizak"]
+homepage = "https://apexpl.io/"
+keywords = ["http", "hyper", "request", "postman", "download"]
+categories = ["network-programming"] 
+edition = "2021"
+autotests = false
+description = "Simple, straight forward, easy to use HTTP client."
+license = "MIT"
+readme = "Readme.md"
+repository = "https://github.com/mdizak/rust-atlas-http"
+
+[lib]
+name = "atlas_http"
+
+[dependencies]
+base64 = "0.21.7"
+mime_guess = "2.0.4"
+rand = "0.8.5"
+rustls = "0.22.2"
+tokio = { version = "1.36.0", features = ["net", "fs", "io-util"] }
+tokio-rustls = "0.26.2"
+url = "2.5.0"
+urlencoding = "2.1.3"
+webpki = "0.22.4"
+webpki-roots = "0.26.0"
+
+

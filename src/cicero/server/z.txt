@@ -1,0 +1,45 @@
+   Compiling cicero-server v0.1.0 (/home/boxer/devel/cicero/cicero/src/cicero/server)
+error[E0382]: use of moved value: `self_clone`
+   --> cicero/server/src/apollo/server.rs:127:22
+    |
+89  |         let self_clone = self;
+    |             ---------- move occurs because `self_clone` has type `&mut ApolloServer`, which does not implement the `Copy` trait
+...
+93  |         tokio::spawn(async move {
+    |                      ---------- value moved here
+94  |             loop {
+    |             ---- inside of this loop
+...
+98  |                         let vault = self_clone.vault.clone();
+    |                                     ---------------- variable moved due to use in coroutine
+...
+127 |         tokio::spawn(async move {
+    |                      ^^^^^^^^^^ value used here after move
+...
+131 |                         let vault = &self_clone.vault;
+    |                                      ---------------- use occurs due to use in coroutine
+
+error[E0521]: borrowed data escapes outside of method
+   --> cicero/server/src/apollo/server.rs:135:25
+    |
+49  |       pub async fn start(&mut self) -> Result<(), Error> {
+    |                          ---------
+    |                          |
+    |                          `self` is a reference that is only valid in the method body
+    |                          let's call the lifetime of this reference `'1`
+...
+135 | /                         tokio::spawn(async move {
+136 | |                             // Authenticate and grab UUID before upgrade
+137 | |                             let mut auth_uuid = None;
+138 | |                             let callback = |req: &Request, res: Response| {
+...   |
+160 | |                             }
+161 | |                         });
+    | |                          ^
+    | |                          |
+    | |__________________________`self` escapes the method body here
+    |                            argument requires that `'1` must outlive `'static`
+
+Some errors have detailed explanations: E0382, E0521.
+For more information about an error, try `rustc --explain E0382`.
+error: could not compile `cicero-server` (bin "cicero-server") due to 2 previous errors

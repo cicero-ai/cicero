@@ -73,7 +73,7 @@ impl TokenCleaner {
 
             // Prefix symbol
             } else if in_prefix && SPECIAL_CHARS.contains(&c) {
-                buffer.push_token(Token::prefix(&c.to_string(), vocab));
+                buffer.push_token(Token::prefix(&c.to_string(), vocab), &vocab);
             } else {
                 in_prefix = false;
 
@@ -95,9 +95,9 @@ impl TokenCleaner {
     /// Classifies a numeric word as a time or general numeric token, pushing it to the buffer.
     fn classify_numeric(&mut self, word: &String, vocab: &VocabDatabase, buffer: &mut Buffer) {
         if self.is_time() {
-            buffer.push_token(Token::special(word, "|time|", "", "", vocab));
+            buffer.push_token(Token::special(word, "|time|", "", "", vocab), &vocab);
         } else {
-            buffer.push_token(Token::numeric(word, vocab));
+            buffer.push_token(Token::numeric(word, vocab), &vocab);
         }
     }
 
@@ -120,11 +120,11 @@ impl TokenCleaner {
                     &value,
                     &suffix,
                     vocab,
-                ));
+                ), &vocab);
                 return None;
             } else if let Some((suffix_tag, _)) = vocab.preprocess.hashes.get(&suffix) {
                 let value = self.chars[..self.numeric_len].iter().collect::<String>();
-                buffer.push_token(Token::special(word, suffix_tag, &value, &suffix, vocab));
+                buffer.push_token(Token::special(word, suffix_tag, &value, &suffix, vocab), &vocab);
                 return None;
             }
         }

@@ -280,7 +280,7 @@ impl Token {
         // Go through categories, calculate distance / score
         for cat1 in token1_categories.iter() {
             for cat2 in token2_categories.iter() {
-                let depth = self.get_common_category_depth(&cat1, &cat2);
+                let depth = self.get_common_category_depth(cat1, cat2);
                 //let depth = 1;
                 total_score += depth as f32;
                 comparisons += 1;

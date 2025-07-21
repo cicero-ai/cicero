@@ -6,7 +6,7 @@
 use super::Token;
 
 /// Represents the tokenized output of input text, including tokens, multi-word entities (MWEs), and iteration state.
-#[derive(Clone)]
+#[derive(Default, Clone)]
 pub struct TokenizedInput {
     pub original: String,
     pub tokens: Vec<Token>,

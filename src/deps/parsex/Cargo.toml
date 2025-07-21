@@ -1,0 +1,21 @@
+[package]
+name = "parsex"
+version = "0.1.1"
+authors = ["Matt Dizak"]
+homepage = "https://apexpl.io/"
+keywords = ["html-parser", "html", "parser"]
+edition = "2021"
+autotests = false
+description = "Simplistically, quickly and efficiently parse and modify HTML documents"
+license = "MIT"
+readme = "Readme.md"
+repository = "https://github.com/mdizak/rust-parsex"
+
+[lib]
+name = "parsex"
+
+[dependencies]
+regex = "1.10.3"
+
+
+

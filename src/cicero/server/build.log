@@ -1,0 +1,1880 @@
+warning: /home/boxer/devel/cicero/cicero/src/Cargo.toml: unused manifest key: fmt
+   Compiling faiss-sys v0.6.2
+   Compiling cicero v0.1.0 (/home/boxer/devel/cicero/cicero/src/cicero/lib)
+error[E0428]: the name `Postman` is defined multiple times
+  --> cicero/lib/src/security/postman.rs:29:1
+   |
+15 | pub struct Postman {
+   | ------------------ previous definition of the type `Postman` here
+...
+29 | pub struct Postman {
+   | ^^^^^^^^^^^^^^^^^^ `Postman` redefined here
+   |
+   = note: `Postman` must be defined only once in the type namespace of this module
+
+error[E0432]: unresolved import `argon2`
+ --> cicero/lib/src/security/forge.rs:7:5
+  |
+7 | use argon2::Argon2;
+  |     ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0432]: unresolved import `sha2`
+ --> cicero/lib/src/security/forge.rs:8:5
+  |
+8 | use sha2::{Sha256, Digest};
+  |     ^^^^ use of undeclared crate or module `sha2`
+
+error[E0432]: unresolved import `crate::error`
+  --> cicero/lib/src/security/forge.rs:10:12
+   |
+10 | use crate::error::Error;
+   |            ^^^^^
+   |            |
+   |            unresolved import
+   |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `crate::error`
+ --> cicero/lib/src/security/postman.rs:5:12
+  |
+5 | use crate::error::Error;
+  |            ^^^^^
+  |            |
+  |            unresolved import
+  |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `sha2`
+ --> cicero/lib/src/security/postman.rs:9:5
+  |
+9 | use sha2::Sha256;
+  |     ^^^^ use of undeclared crate or module `sha2`
+
+error[E0432]: unresolved import `crate::error`
+ --> cicero/lib/src/security/user_key.rs:7:12
+  |
+7 | use crate::error::Error;
+  |            ^^^^^
+  |            |
+  |            unresolved import
+  |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `super::Role`
+ --> cicero/lib/src/security/user_key.rs:9:20
+  |
+9 | use super::{forge, Role, Postman};
+  |                    ^^^^ no `Role` in `security`
+
+error[E0432]: unresolved import `serde_derive`
+ --> cicero/lib/src/security/user_key.rs:5:5
+  |
+5 | use serde_derive::{Serialize, Deserialize};
+  |     ^^^^^^^^^^^^ use of undeclared crate or module `serde_derive`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:30
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                              ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:83
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                                                                                   ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:59
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                                                           ^^^^^^ use of undeclared crate or module `argon2`
+   |
+help: consider importing this enum
+   |
+2  + use uuid::Version;
+   |
+help: if you import `Version`, refer to it directly
+   |
+98 -     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+98 +     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |
+
+error[E0433]: failed to resolve: could not find `distributions` in `rand`
+  --> cicero/lib/src/utils/random.rs:32:36
+   |
+32 |         .map(|()| rng.sample(rand::distributions::Uniform::from(0..charset.len())))
+   |                                    ^^^^^^^^^^^^^ could not find `distributions` in `rand`
+   |
+help: consider importing this struct
+   |
+2  + use rand::distr::Uniform;
+   |
+help: if you import `Uniform`, refer to it directly
+   |
+32 -         .map(|()| rng.sample(rand::distributions::Uniform::from(0..charset.len())))
+32 +         .map(|()| rng.sample(Uniform::from(0..charset.len())))
+   |
+
+error[E0433]: failed to resolve: use of undeclared type `PathBuf`
+  --> cicero/lib/src/utils/sys.rs:16:36
+   |
+16 |                 .unwrap_or_else(|| PathBuf::from("/tmp"))
+   |                                    ^^^^^^^ use of undeclared type `PathBuf`
+   |
+help: consider importing this struct
+   |
+2  + use std::path::PathBuf;
+   |
+
+error[E0603]: function `get_nonce` is private
+   --> cicero/lib/src/security/postman.rs:100:28
+    |
+100 |         let nonce = forge::get_nonce(previous_nonce);
+    |                            ^^^^^^^^^ private function
+    |
+note: the function `get_nonce` is defined here
+   --> cicero/lib/src/security/forge.rs:121:1
+    |
+121 | fn get_nonce(previous_nonce: Option<[u8; 32]>) -> [u8; 32] {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0592]: duplicate definitions with name `new`
+  --> cicero/lib/src/security/postman.rs:21:5
+   |
+21 |     pub fn new(user_key: &UserKey, public_key: &PublicKey) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `new`
+...
+35 |     pub fn new(user_key: &UserKey, public_key: &PublicKey) -> Self {
+   |     -------------------------------------------------------------- other definition for `new`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:21:40
+   |
+21 |     let encryption_key: [u8; 32] = rng.gen();
+   |                                        ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:22:28
+   |
+22 |     let iv: [u8; 12] = rng.gen();
+   |                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:28:37
+   |
+28 |     let password_iv: [u8; 12] = rng.gen();
+   |                                     ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0425]: cannot find function `derive_child` in this scope
+  --> cicero/lib/src/security/forge.rs:31:30
+   |
+31 |     let (child_key, nonce) = derive_child(&argon_hash, None);
+   |                              ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `derive_child` in this scope
+  --> cicero/lib/src/security/forge.rs:70:26
+   |
+70 |     let (child_key, _) = derive_child(&argon_hash, Some(nonce.try_into()?));
+   |                          ^^^^^^^^^^^^ not found in this scope
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:97:54
+   |
+97 |     let salt = previous_salt.unwrap_or_else(|| OsRng.gen());
+   |                                                      ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+   --> cicero/lib/src/security/forge.rs:106:56
+    |
+106 |     let nonce = previous_nonce.unwrap_or_else(|| OsRng.gen());
+    |                                                        ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+    |
+    = note: the following trait bounds were not satisfied:
+            `aes_gcm::aead::OsRng: rand::RngCore`
+            which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+   --> cicero/lib/src/security/forge.rs:122:44
+    |
+122 |     previous_nonce.unwrap_or_else(|| OsRng.gen())
+    |                                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+    |
+    = note: the following trait bounds were not satisfied:
+            `aes_gcm::aead::OsRng: rand::RngCore`
+            which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:46:44
+   |
+46 |         let encryption_key: [u8; 32] = rng.gen();
+   |                                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:47:32
+   |
+47 |         let iv: [u8; 12] = rng.gen();
+   |                                ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:53:38
+   |
+53 |         let outer_iv: [u8; 12] = rng.gen();
+   |                                      ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: no method named `derive_child` found for reference `&postman::Postman` in the current scope
+  --> cicero/lib/src/security/postman.rs:54:39
+   |
+54 |         let (child_key, nonce) = self.derive_child(None);
+   |                                       ^^^^^^^^^^^^ method not found in `&Postman`
+
+error[E0599]: no method named `derive_child` found for reference `&postman::Postman` in the current scope
+  --> cicero/lib/src/security/postman.rs:84:35
+   |
+84 |         let (child_key, _) = self.derive_child(Some(nonce.try_into()?));
+   |                                   ^^^^^^^^^^^^ method not found in `&Postman`
+
+error[E0277]: the trait bound `rand_core::OsRng: aes_gcm::aead::rand_core::RngCore` is not satisfied because the trait comes from a different crate version
+   --> cicero/lib/src/security/user_key.rs:26:40
+    |
+26  |         let secret = StaticSecret::new(OsRng);
+    |                                        ^^^^^ the trait `aes_gcm::aead::rand_core::RngCore` is not implemented for `rand_core::OsRng`
+    |
+note: there are multiple different versions of crate `rand_core` in the dependency graph
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/lib.rs:142:1
+    |
+142 | pub trait RngCore {
+    | ^^^^^^^^^^^^^^^^^ this is the required trait
+    |
+   ::: cicero/lib/src/security/forge.rs:2:5
+    |
+2   | use aes_gcm::aead::{Aead, AeadCore, KeyInit, OsRng};
+    |     ------- one version of crate `rand_core` is used here, as a dependency of crate `crypto_common`
+    |
+   ::: cicero/lib/src/security/user_key.rs:4:5
+    |
+4   | use rand_core::OsRng;
+    |     --------- one version of crate `rand_core` is used here, as a direct dependency of the current crate
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/os.rs:47:1
+    |
+47  | pub struct OsRng;
+    | ---------------- this type doesn't implement the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- this type implements the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/block.rs:67:1
+    |
+67  | pub trait BlockRngCore {
+    | ---------------------- this is the found trait
+    = note: two types coming from two different versions of the same crate are different types even if they look the same
+    = help: you can use `cargo tree` to explore your dependency tree
+
+error[E0277]: the trait bound `rand_core::OsRng: aes_gcm::aead::rand_core::CryptoRng` is not satisfied because the trait comes from a different crate version
+   --> cicero/lib/src/security/user_key.rs:26:40
+    |
+26  |         let secret = StaticSecret::new(OsRng);
+    |                                        ^^^^^ the trait `aes_gcm::aead::rand_core::CryptoRng` is not implemented for `rand_core::OsRng`
+    |
+note: there are multiple different versions of crate `rand_core` in the dependency graph
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/lib.rs:209:1
+    |
+209 | pub trait CryptoRng {}
+    | ^^^^^^^^^^^^^^^^^^^ this is the required trait
+    |
+   ::: cicero/lib/src/security/forge.rs:2:5
+    |
+2   | use aes_gcm::aead::{Aead, AeadCore, KeyInit, OsRng};
+    |     ------- one version of crate `rand_core` is used here, as a dependency of crate `crypto_common`
+    |
+   ::: cicero/lib/src/security/user_key.rs:4:5
+    |
+4   | use rand_core::OsRng;
+    |     --------- one version of crate `rand_core` is used here, as a direct dependency of the current crate
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/os.rs:47:1
+    |
+47  | pub struct OsRng;
+    | ---------------- this type doesn't implement the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- this type implements the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/block.rs:67:1
+    |
+67  | pub trait BlockRngCore {
+    | ---------------------- this is the found trait
+    = note: two types coming from two different versions of the same crate are different types even if they look the same
+    = help: you can use `cargo tree` to explore your dependency tree
+
+error[E0599]: no function or associated item named `new_v4` found for struct `Uuid` in the current scope
+   --> cicero/lib/src/security/user_key.rs:29:25
+    |
+29  |             uuid: Uuid::new_v4(),
+    |                         ^^^^^^ function or associated item not found in `Uuid`
+    |
+note: if you're trying to build a new `Uuid` consider using one of the following associated functions:
+      uuid::builder::<impl Uuid>::nil
+      uuid::builder::<impl Uuid>::max
+      uuid::builder::<impl Uuid>::from_fields
+      uuid::builder::<impl Uuid>::from_fields_le
+      and 10 others
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/uuid-1.15.0/src/builder.rs:72:5
+    |
+72  |     pub const fn nil() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+98  |     pub const fn max() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+122 |     pub const fn from_fields(d1: u32, d2: u16, d3: u16, d4: &[u8; 8]) -> Uuid {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+168 |     pub const fn from_fields_le(d1: u32, d2: u16, d3: u16, d4: &[u8; 8]) -> Uuid {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+  --> cicero/lib/src/security/user_key.rs:39:18
+   |
+39 |         Postman::new(&self, &public_key)
+   |                  ^^^ multiple `new` found
+   |
+note: candidate #1 is defined in an impl for the type `postman::Postman`
+  --> cicero/lib/src/security/postman.rs:21:5
+   |
+21 |     pub fn new(user_key: &UserKey, public_key: &PublicKey) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `postman::Postman`
+  --> cicero/lib/src/security/postman.rs:35:5
+   |
+35 |     pub fn new(user_key: &UserKey, public_key: &PublicKey) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `rand_core::OsRng: Rng` is not satisfied
+   --> cicero/lib/src/utils/random.rs:19:19
+    |
+19  |     chars.shuffle(&mut rng);
+    |           ------- ^^^^^^^^ the trait `DerefMut` is not implemented for `rand_core::OsRng`
+    |           |
+    |           required by a bound introduced by this call
+    |
+    = note: required for `rand_core::OsRng` to implement `rand::RngCore`
+    = note: required for `rand_core::OsRng` to implement `Rng`
+note: required by a bound in `shuffle`
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand-0.9.0/src/seq/slice.rs:339:12
+    |
+337 |     fn shuffle<R>(&mut self, rng: &mut R)
+    |        ------- required by a bound in this associated function
+338 |     where
+339 |         R: Rng + ?Sized;
+    |            ^^^ required by this bound in `SliceRandom::shuffle`
+
+Some errors have detailed explanations: E0034, E0277, E0425, E0428, E0432, E0433, E0592, E0599, E0603.
+For more information about an error, try `rustc --explain E0034`.
+error: could not compile `cicero` (lib) due to 34 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: failed to run custom build command for `faiss-sys v0.6.2`
+
+Caused by:
+  process didn't exit successfully: `/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-43b7dd9f4305896a/build-script-build` (exit status: 101)
+  --- stdout
+  CMAKE_TOOLCHAIN_FILE_x86_64-unknown-linux-gnu = None
+  CMAKE_TOOLCHAIN_FILE_x86_64_unknown_linux_gnu = None
+  HOST_CMAKE_TOOLCHAIN_FILE = None
+  CMAKE_TOOLCHAIN_FILE = None
+  CMAKE_GENERATOR_x86_64-unknown-linux-gnu = None
+  CMAKE_GENERATOR_x86_64_unknown_linux_gnu = None
+  HOST_CMAKE_GENERATOR = None
+  CMAKE_GENERATOR = None
+  CMAKE_PREFIX_PATH_x86_64-unknown-linux-gnu = None
+  CMAKE_PREFIX_PATH_x86_64_unknown_linux_gnu = None
+  HOST_CMAKE_PREFIX_PATH = None
+  CMAKE_PREFIX_PATH = None
+  CMAKE_x86_64-unknown-linux-gnu = None
+  CMAKE_x86_64_unknown_linux_gnu = None
+  HOST_CMAKE = None
+  CMAKE = None
+  running: cd "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build" && CMAKE_PREFIX_PATH="" LC_ALL="C" "cmake" "-Wdev" "--debug-output" "/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss" "-DFAISS_ENABLE_C_API=ON" "-DBUILD_SHARED_LIBS=OFF" "-DCMAKE_BUILD_TYPE=Release" "-DFAISS_ENABLE_GPU=OFF" "-DFAISS_ENABLE_PYTHON=OFF" "-DBUILD_TESTING=OFF" "-DCMAKE_INSTALL_PREFIX=/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out" "-DCMAKE_C_FLAGS= -ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_C_COMPILER=/usr/bin/cc" "-DCMAKE_CXX_FLAGS= -ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_CXX_COMPILER=/usr/bin/c++" "-DCMAKE_ASM_FLAGS= -ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_ASM_COMPILER=/usr/bin/cc" "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
+  Running with debug output on.
+  -- Configuring done (0.0s)
+  -- Generating /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+  -- Generating /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/CMakeLists.txt
+  -- Generating /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/c_api
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/c_api/CMakeLists.txt
+  -- Generating /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/demos
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/demos/CMakeLists.txt
+  -- Generating /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/tutorial/cpp
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/tutorial/cpp/CMakeLists.txt
+  -- Generating done (0.0s)
+  -- Build files have been written to: /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build
+  running: cd "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build" && LC_ALL="C" MAKEFLAGS="-j --jobserver-fds=8,9 --jobserver-auth=8,9" "cmake" "--build" "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build" "--target" "install" "--config" "Debug"
+  Change Dir: '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+
+  Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile install
+  /usr/bin/cmake -S/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -B/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build --check-build-system CMakeFiles/Makefile.cmake 0
+  /usr/bin/cmake -E cmake_progress_start /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/CMakeFiles /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build//CMakeFiles/progress.marks
+  /usr/bin/gmake  -f CMakeFiles/Makefile2 all
+  gmake[1]: Entering directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+  /usr/bin/gmake  -f faiss/CMakeFiles/faiss.dir/build.make faiss/CMakeFiles/faiss.dir/depend
+  gmake[2]: Entering directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/DependInfo.cmake "--color="
+  Dependencies file "faiss/CMakeFiles/faiss.dir/AutoTune.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/Clustering.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IVFlib.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/Index.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/Index2Layer.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexAdditiveQuantizer.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinary.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexFlat.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexHNSW.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVF.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFAdditiveQuantizer.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFFlat.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFPQ.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFPQFastScan.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFPQR.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexIVFSpectralHash.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexLSH.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexLattice.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexNNDescent.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexNSG.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexPQ.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexPQFastScan.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Dependencies file "faiss/CMakeFiles/faiss.dir/IndexPreTransform.cpp.o.d" is newer than depends file "/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss/CMakeFiles/faiss.dir/compiler_depend.internal".
+  Consolidate compiler generated dependencies of target faiss
+  gmake[2]: Leaving directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+  /usr/bin/gmake  -f faiss/CMakeFiles/faiss.dir/build.make faiss/CMakeFiles/faiss.dir/build
+  gmake[2]: Entering directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+  [  0%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o
+  [  2%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o
+  [  2%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o -MF CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp
+  [  2%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o
+  [  2%] Building CXX object faiss/CMakeFiles/faiss.dir/Clustering.cpp.o
+  [  6%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinary.cpp.o
+  [  6%] Building CXX object faiss/CMakeFiles/faiss.dir/Index2Layer.cpp.o
+  [  2%] Building CXX object faiss/CMakeFiles/faiss.dir/Index.cpp.o
+  [ 10%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexFlat.cpp.o
+  [ 10%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o -MF CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/Clustering.cpp.o -MF CMakeFiles/faiss.dir/Clustering.cpp.o.d -o CMakeFiles/faiss.dir/Clustering.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp
+  [ 10%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexHNSW.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/Index.cpp.o -MF CMakeFiles/faiss.dir/Index.cpp.o.d -o CMakeFiles/faiss.dir/Index.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/Index2Layer.cpp.o -MF CMakeFiles/faiss.dir/Index2Layer.cpp.o.d -o CMakeFiles/faiss.dir/Index2Layer.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinary.cpp.o -MF CMakeFiles/faiss.dir/IndexBinary.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinary.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o -MF CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp
+  [ 12%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o
+  [ 14%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexNSG.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o -MF CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexFlat.cpp.o -MF CMakeFiles/faiss.dir/IndexFlat.cpp.o.d -o CMakeFiles/faiss.dir/IndexFlat.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o -MF CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o.d -o CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o -MF CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o.d -o CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp
+  [ 16%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexNNDescent.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexHNSW.cpp.o -MF CMakeFiles/faiss.dir/IndexHNSW.cpp.o.d -o CMakeFiles/faiss.dir/IndexHNSW.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.cpp
+  [ 16%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexLSH.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexNSG.cpp.o -MF CMakeFiles/faiss.dir/IndexNSG.cpp.o.d -o CMakeFiles/faiss.dir/IndexNSG.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNSG.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexNNDescent.cpp.o -MF CMakeFiles/faiss.dir/IndexNNDescent.cpp.o.d -o CMakeFiles/faiss.dir/IndexNNDescent.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNNDescent.cpp
+  [ 16%] Building CXX object faiss/CMakeFiles/faiss.dir/IndexPreTransform.cpp.o
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexLSH.cpp.o -MF CMakeFiles/faiss.dir/IndexLSH.cpp.o.d -o CMakeFiles/faiss.dir/IndexLSH.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.cpp
+  cd /home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build/faiss && /usr/bin/c++ -DFINTEGER=int -I/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss -ffunction-sections -fdata-sections -fPIC -m64 -O3 -DNDEBUG -std=gnu++11 -fPIC -fopenmp -MD -MT faiss/CMakeFiles/faiss.dir/IndexPreTransform.cpp.o -MF CMakeFiles/faiss.dir/IndexPreTransform.cpp.o.d -o CMakeFiles/faiss.dir/IndexPreTransform.cpp.o -c /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp
+  gmake[2]: Leaving directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+  gmake[1]: Leaving directory '/home/boxer/devel/cicero/cicero/src/target/debug/build/faiss-sys-003d4567a0d860d7/out/build'
+
+
+  --- stderr
+     Entering             /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Returning to         /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Entering             /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/c_api
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Returning to         /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Entering             /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/demos
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Returning to         /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Entering             /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/tutorial/cpp
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+     Returning to         /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss
+     Called from: [1]	/home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/CMakeLists.txt
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:18,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <cstdio>
+    +++ |+#include <cstdint>
+     15 | #include <sstream>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:20:6: error: no declaration matches 'void faiss::IndexBinary::train(idx_t, const uint8_t*)'
+     20 | void IndexBinary::train(idx_t, const uint8_t*) {
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:18: note: candidate is: 'virtual void faiss::IndexBinary::train(idx_t, const int*)'
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                  ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:24:6: error: no declaration matches 'void faiss::IndexBinary::range_search(idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const'
+     24 | void IndexBinary::range_search(idx_t, const uint8_t*, int, RangeSearchResult*)
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:116:18: note: candidate is: 'virtual void faiss::IndexBinary::range_search(idx_t, const int*, int, faiss::RangeSearchResult*) const'
+    116 |     virtual void range_search(
+        |                  ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:29:6: error: no declaration matches 'void faiss::IndexBinary::assign(idx_t, const uint8_t*, idx_t*, idx_t) const'
+     29 | void IndexBinary::assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k)
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:10: note: candidate is: 'void faiss::IndexBinary::assign(idx_t, const int*, idx_t*, idx_t) const'
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:35:6: error: no declaration matches 'void faiss::IndexBinary::add_with_ids(idx_t, const uint8_t*, const idx_t*)'
+     35 | void IndexBinary::add_with_ids(idx_t, const uint8_t*, const idx_t*) {
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:18: note: candidate is: 'virtual void faiss::IndexBinary::add_with_ids(idx_t, const int*, const idx_t*)'
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                  ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:44:6: error: no declaration matches 'void faiss::IndexBinary::reconstruct(idx_t, uint8_t*) const'
+     44 | void IndexBinary::reconstruct(idx_t, uint8_t*) const {
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:18: note: candidate is: 'virtual void faiss::IndexBinary::reconstruct(idx_t, int*) const'
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                  ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:48:6: error: no declaration matches 'void faiss::IndexBinary::reconstruct_n(idx_t, idx_t, uint8_t*) const'
+     48 | void IndexBinary::reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const {
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:18: note: candidate is: 'virtual void faiss::IndexBinary::reconstruct_n(idx_t, idx_t, int*) const'
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                  ^~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.cpp:54:6: error: no declaration matches 'void faiss::IndexBinary::search_and_reconstruct(idx_t, const uint8_t*, idx_t, int32_t*, idx_t*, uint8_t*) const'
+     54 | void IndexBinary::search_and_reconstruct(
+        |      ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:161:18: note: candidate is: 'virtual void faiss::IndexBinary::search_and_reconstruct(idx_t, const int*, idx_t, int32_t*, idx_t*, int*) const'
+    161 |     virtual void search_and_reconstruct(
+        |                  ^~~~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:34:8: note: 'struct faiss::IndexBinary' defined here
+     34 | struct IndexBinary {
+        |        ^~~~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:18,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:13,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <cstdio>
+    +++ |+#include <cstdint>
+     15 | #include <sstream>
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:163: faiss/CMakeFiles/faiss.dir/IndexBinary.cpp.o] Error 1
+  gmake[2]: *** Waiting for unfinished jobs....
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:37:29: error: 'uint8_t' does not name a type
+     37 |     void add(idx_t n, const uint8_t* x) override;
+        |                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:14:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     13 | #include <faiss/IndexBinary.h>
+    +++ |+#include <cstdint>
+     14 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:43:19: error: 'uint8_t' does not name a type
+     43 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:43:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:48:31: error: 'uint8_t' does not name a type
+     48 |     void train(idx_t n, const uint8_t* x) override;
+        |                               ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:48:31: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.cpp:8:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:8:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:102:19: error: 'uint8_t' does not name a type
+    102 |             const uint8_t* x_in,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <vector>
+    +++ |+#include <cstdint>
+     15 | 
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.h:84:10: error: 'void faiss::IndexPreTransform::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     84 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.h:85:10: error: 'void faiss::IndexPreTransform::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     85 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.h:65:10: error: 'void faiss::IndexLSH::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     65 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.h:67:10: error: 'void faiss::IndexLSH::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     67 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:102:19: error: 'uint8_t' does not name a type
+    102 |             const uint8_t* x_in,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | 
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:18,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <cstdio>
+    +++ |+#include <cstdint>
+     15 | #include <sstream>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:16:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:17: error: 'uint8_t' was not declared in this scope
+     22 |     std::vector<uint8_t> xb;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexBinary.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 1 is invalid
+     22 |     std::vector<uint8_t> xb;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: error: 'uint8_t' does not name a type
+     33 |     void add(idx_t n, const uint8_t* x) override;
+        |                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: error: 'uint8_t' does not name a type
+     39 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: error: 'uint8_t' does not name a type
+     46 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:50:33: error: 'uint8_t' has not been declared
+     50 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |                                 ^~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.h:14,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:45: error: 'uint8_t' has not been declared
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |                                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:35: error: 'uint8_t' does not name a type
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |                                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexFlatCodes.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'float* faiss::IndexFlat::get_xb()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:55:30: error: request for member 'data' in '((faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     55 |         return (float*)codes.data();
+        |                              ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'const float* faiss::IndexFlat::get_xb() const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:58:36: error: request for member 'data' in '((const faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     58 |         return (const float*)codes.data();
+        |                                    ^~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:14:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     13 | #include <vector>
+    +++ |+#include <cstdint>
+     14 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:18,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <cstdio>
+    +++ |+#include <cstdint>
+     15 | #include <sstream>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:45: error: 'uint8_t' has not been declared
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |                                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:35: error: 'uint8_t' does not name a type
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |                                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexFlatCodes.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'float* faiss::IndexFlat::get_xb()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:55:30: error: request for member 'data' in '((faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     55 |         return (float*)codes.data();
+        |                              ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'const float* faiss::IndexFlat::get_xb() const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:58:36: error: request for member 'data' in '((const faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     58 |         return (const float*)codes.data();
+        |                                    ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:14,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:17: error: 'uint8_t' was not declared in this scope
+     22 |     std::vector<uint8_t> xb;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexBinary.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 1 is invalid
+     22 |     std::vector<uint8_t> xb;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: error: 'uint8_t' does not name a type
+     33 |     void add(idx_t n, const uint8_t* x) override;
+        |                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: error: 'uint8_t' does not name a type
+     39 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: error: 'uint8_t' does not name a type
+     46 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:50:33: error: 'uint8_t' has not been declared
+     50 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |                                 ^~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.h:15:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPQ.h: At global scope:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPQ.h:51:10: error: 'void faiss::IndexPQ::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     51 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPQ.h:53:10: error: 'void faiss::IndexPQ::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     53 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.cpp: In member function 'virtual void faiss::IndexLSH::search(faiss::Index::idx_t, const float*, faiss::Index::idx_t, float*, faiss::Index::idx_t*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.cpp:123:41: error: request for member 'data' in '((const faiss::IndexLSH*)this)->faiss::IndexLSH::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+    123 |     hammings_knn_hc(&res, qcodes, codes.data(), ntotal, code_size, true);
+        |                                         ^~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNSG.h:14,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNSG.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:12,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:15,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNNDescent.h:14,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexNNDescent.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:45: error: 'uint8_t' has not been declared
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |                                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:35: error: 'uint8_t' does not name a type
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |                                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexFlatCodes.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <sstream>
+    +++ |+#include <cstdint>
+     16 | #include <string>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'float* faiss::IndexFlat::get_xb()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:55:30: error: request for member 'data' in '((faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     55 |         return (float*)codes.data();
+        |                              ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'const float* faiss::IndexFlat::get_xb() const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:58:36: error: request for member 'data' in '((const faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     58 |         return (const float*)codes.data();
+        |                                    ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:17: error: 'uint8_t' was not declared in this scope
+     23 |     std::vector<uint8_t> codes;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:13:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     12 | #include <faiss/Index.h>
+    +++ |+#include <cstdint>
+     13 | #include <vector>
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 1 is invalid
+     23 |     std::vector<uint8_t> codes;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.h:23:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:45: error: 'uint8_t' has not been declared
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |                                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:35: error: 'uint8_t' does not name a type
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |                                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:16:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     15 | #include <faiss/IndexFlatCodes.h>
+    +++ |+#include <cstdint>
+     16 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'float* faiss::IndexFlat::get_xb()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:55:30: error: request for member 'data' in '((faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     55 |         return (float*)codes.data();
+        |                              ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'const float* faiss::IndexFlat::get_xb() const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:58:36: error: request for member 'data' in '((const faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     58 |         return (const float*)codes.data();
+        |                                    ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.cpp:32:6: error: no declaration matches 'void faiss::IndexBinaryFromFloat::add(faiss::IndexBinary::idx_t, const uint8_t*)'
+     32 | void IndexBinaryFromFloat::add(idx_t n, const uint8_t* x) {
+        |      ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:37:10: note: candidate is: 'virtual void faiss::IndexBinaryFromFloat::add(faiss::IndexBinary::idx_t, const int*)'
+     37 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:26:8: note: 'struct faiss::IndexBinaryFromFloat' defined here
+     26 | struct IndexBinaryFromFloat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.cpp:50:6: error: no declaration matches 'void faiss::IndexBinaryFromFloat::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const'
+     50 | void IndexBinaryFromFloat::search(
+        |      ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:41:10: note: candidate is: 'virtual void faiss::IndexBinaryFromFloat::search(faiss::IndexBinary::idx_t, const int*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const'
+     41 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:26:8: note: 'struct faiss::IndexBinaryFromFloat' defined here
+     26 | struct IndexBinaryFromFloat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.cpp:73:6: error: no declaration matches 'void faiss::IndexBinaryFromFloat::train(faiss::IndexBinary::idx_t, const uint8_t*)'
+     73 | void IndexBinaryFromFloat::train(idx_t n, const uint8_t* x) {
+        |      ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:48:10: note: candidate is: 'virtual void faiss::IndexBinaryFromFloat::train(faiss::IndexBinary::idx_t, const int*)'
+     48 |     void train(idx_t n, const uint8_t* x) override;
+        |          ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFromFloat.h:26:8: note: 'struct faiss::IndexBinaryFromFloat' defined here
+     26 | struct IndexBinaryFromFloat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp: In member function 'void faiss::IndexPreTransform::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp:245:32: error: cannot convert 'uint8_t*' {aka 'unsigned char*'} to 'int*'
+    245 |         index->sa_encode(n, x, bytes);
+        |                                ^~~~~
+        |                                |
+        |                                uint8_t* {aka unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:62: note:   initializing argument 3 of 'virtual void faiss::Index::sa_encode(idx_t, const float*, int*) const'
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ~~~~~~~~~^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp:249:33: error: cannot convert 'uint8_t*' {aka 'unsigned char*'} to 'int*'
+    249 |         index->sa_encode(n, xt, bytes);
+        |                                 ^~~~~
+        |                                 |
+        |                                 uint8_t* {aka unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:62: note:   initializing argument 3 of 'virtual void faiss::Index::sa_encode(idx_t, const float*, int*) const'
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ~~~~~~~~~^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp: In member function 'void faiss::IndexPreTransform::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp:256:29: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    256 |         index->sa_decode(n, bytes, x);
+        |                             ^~~~~
+        |                             |
+        |                             const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:52: note:   initializing argument 2 of 'virtual void faiss::Index::sa_decode(idx_t, const int*, float*) const'
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                     ~~~~~~~~~~~~~~~^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPreTransform.cpp:259:29: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    259 |         index->sa_decode(n, bytes, x1.get());
+        |                             ^~~~~
+        |                             |
+        |                             const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:52: note:   initializing argument 2 of 'virtual void faiss::Index::sa_decode(idx_t, const int*, float*) const'
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                     ~~~~~~~~~~~~~~~^~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:17:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexIVF.h:349:10: error: 'void faiss::IndexIVF::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+    349 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:71:10: error: 'void faiss::IndexBinaryIVF::train(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+     71 |     void train(idx_t n, const uint8_t* x) override;
+        |          ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:73:10: error: 'void faiss::IndexBinaryIVF::add(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+     73 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:75:10: error: 'void faiss::IndexBinaryIVF::add_with_ids(faiss::IndexBinary::idx_t, const uint8_t*, const faiss::IndexBinary::idx_t*)' marked 'override', but does not override
+     75 |     void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids) override;
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:121:10: error: 'void faiss::IndexBinaryIVF::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const' marked 'override', but does not override
+    121 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:128:10: error: 'void faiss::IndexBinaryIVF::range_search(faiss::IndexBinary::idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const' marked 'override', but does not override
+    128 |     void range_search(
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:142:10: error: 'void faiss::IndexBinaryIVF::reconstruct(faiss::IndexBinary::idx_t, uint8_t*) const' marked 'override', but does not override
+    142 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |          ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:153:10: error: 'void faiss::IndexBinaryIVF::reconstruct_n(faiss::IndexBinary::idx_t, faiss::IndexBinary::idx_t, uint8_t*) const' marked 'override', but does not override
+    153 |     void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const override;
+        |          ^~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.h:164:10: error: 'void faiss::IndexBinaryIVF::search_and_reconstruct(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*, uint8_t*) const' marked 'override', but does not override
+    164 |     void search_and_reconstruct(
+        |          ^~~~~~~~~~~~~~~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:18,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:16,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp:10:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:53: error: 'uint8_t' has not been declared
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:43: error: 'uint8_t' does not name a type
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                           ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:15:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     14 | #include <cstdio>
+    +++ |+#include <cstdint>
+     15 | #include <sstream>
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:191: faiss/CMakeFiles/faiss.dir/IndexBinaryFromFloat.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:387: faiss/CMakeFiles/faiss.dir/IndexLSH.cpp.o] Error 1
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:36:25: error: 'uint8_t' does not name a type
+     36 |     using component_t = uint8_t;
+        |                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:20:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+     19 | #include <faiss/impl/FaissAssert.h>
+    +++ |+#include <cstdint>
+     20 | 
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: error: 'uint8_t' does not name a type
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                       ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:39: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: error: 'uint8_t' does not name a type
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                                     ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:37: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: error: 'uint8_t' does not name a type
+     84 |     virtual void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids);
+        |                                              ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:84:46: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: error: 'uint8_t' does not name a type
+     97 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: error: 'uint8_t' does not name a type
+    118 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:118:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: error: 'uint8_t' does not name a type
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                                ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:32: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:41: error: 'uint8_t' has not been declared
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:151:52: error: 'uint8_t' has not been declared
+    151 |     virtual void reconstruct_n(idx_t i0, idx_t ni, uint8_t* recons) const;
+        |                                                    ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: error: 'uint8_t' does not name a type
+    163 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:163:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:167:13: error: 'uint8_t' has not been declared
+    167 |             uint8_t* recons) const;
+        |             ^~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:17:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:17: error: 'uint8_t' was not declared in this scope
+     22 |     std::vector<uint8_t> xb;
+        |                 ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:1:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+    +++ |+#include <cstdint>
+      1 | /**
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 1 is invalid
+     22 |     std::vector<uint8_t> xb;
+        |                        ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:22:24: error: template argument 2 is invalid
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: error: 'uint8_t' does not name a type
+     33 |     void add(idx_t n, const uint8_t* x) override;
+        |                             ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:29: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: error: 'uint8_t' does not name a type
+     39 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:39:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: error: 'uint8_t' does not name a type
+     46 |             const uint8_t* x,
+        |                   ^~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:46:19: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:50:33: error: 'uint8_t' has not been declared
+     50 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |                                 ^~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexScalarQuantizer.h:17,
+                   from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.h:16:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexIVF.h:349:10: error: 'void faiss::IndexIVF::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+    349 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp:21:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:10: error: 'void faiss::IndexFlat::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:10: error: 'void faiss::IndexFlat::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:19:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:10: error: 'void faiss::IndexFlat::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:10: error: 'void faiss::IndexFlat::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.h:39:10: error: 'void faiss::IndexBinaryHNSW::add(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+     39 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:20:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.h:65:10: error: 'void faiss::IndexLSH::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     65 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.h:42:10: error: 'void faiss::IndexBinaryHNSW::train(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+     42 |     void train(idx_t n, const uint8_t* x) override;
+        |          ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexLSH.h:67:10: error: 'void faiss::IndexLSH::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     67 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.h:45:10: error: 'void faiss::IndexBinaryHNSW::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const' marked 'override', but does not override
+     45 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.h:52:10: error: 'void faiss::IndexBinaryHNSW::reconstruct(faiss::IndexBinary::idx_t, uint8_t*) const' marked 'override', but does not override
+     52 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |          ^~~~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:15:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexIVF.h:349:10: error: 'void faiss::IndexIVF::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+    349 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:16:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPQ.h:51:10: error: 'void faiss::IndexPQ::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     51 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexPQ.h:53:10: error: 'void faiss::IndexPQ::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     53 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:45:10: error: 'void faiss::IndexBinaryHash::add(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+     45 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:47:10: error: 'void faiss::IndexBinaryHash::add_with_ids(faiss::IndexBinary::idx_t, const uint8_t*, const faiss::IndexBinary::idx_t*)' marked 'override', but does not override
+     47 |     void add_with_ids(idx_t n, const uint8_t* x, const idx_t* xids) override;
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:49:10: error: 'void faiss::IndexBinaryHash::range_search(faiss::IndexBinary::idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const' marked 'override', but does not override
+     49 |     void range_search(
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:55:10: error: 'void faiss::IndexBinaryHash::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const' marked 'override', but does not override
+     55 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:67:10: error: 'void faiss::Index2Layer::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     67 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:68:10: error: 'void faiss::Index2Layer::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:104:10: error: 'void faiss::IndexBinaryMultiHash::add(faiss::IndexBinary::idx_t, const uint8_t*)' marked 'override', but does not override
+    104 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:106:10: error: 'void faiss::IndexBinaryMultiHash::range_search(faiss::IndexBinary::idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const' marked 'override', but does not override
+    106 |     void range_search(
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.h:112:10: error: 'void faiss::IndexBinaryMultiHash::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const' marked 'override', but does not override
+    112 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp: In member function 'virtual void faiss::IndexFlatCodes::add(faiss::Index::idx_t, const float*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:22:11: error: request for member 'resize' in '((faiss::IndexFlatCodes*)this)->faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     22 |     codes.resize((ntotal + n) * code_size);
+        |           ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:23:27: error: invalid types 'int[long unsigned int]' for array subscript
+     23 |     sa_encode(n, x, &codes[ntotal * code_size]);
+        |                           ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp: In member function 'virtual void faiss::IndexFlatCodes::reset()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:28:11: error: request for member 'clear' in '((faiss::IndexFlatCodes*)this)->faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     28 |     codes.clear();
+        |           ^~~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp:25:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexIVFPQ.h:70:10: error: 'void faiss::IndexIVFPQ::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     70 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp: In member function 'virtual size_t faiss::IndexFlatCodes::remove_ids(const faiss::IDSelector&)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:43:31: error: invalid types 'int[long unsigned int]' for array subscript
+     43 |                 memmove(&codes[code_size * j],
+        |                               ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:44:31: error: invalid types 'int[long unsigned int]' for array subscript
+     44 |                         &codes[code_size * i],
+        |                               ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:53:15: error: request for member 'resize' in '((faiss::IndexFlatCodes*)this)->faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     53 |         codes.resize(ntotal * code_size);
+        |               ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp: In member function 'virtual void faiss::IndexFlatCodes::reconstruct_n(faiss::Index::idx_t, faiss::Index::idx_t, float*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlatCodes.cpp:60:25: error: request for member 'data' in '((const faiss::IndexFlatCodes*)this)->faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     60 |     sa_decode(ni, codes.data() + i0 * code_size, recons);
+        |                         ^~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp:27:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:10: error: 'void faiss::IndexFlat::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:10: error: 'void faiss::IndexFlat::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'float* faiss::IndexFlat::get_xb()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:55:30: error: request for member 'data' in '((faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'int'
+     55 |         return (float*)codes.data();
+        |                              ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h: In member function 'const float* faiss::IndexFlat::get_xb() const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:58:36: error: request for member 'data' in '((const faiss::IndexFlat*)this)->faiss::IndexFlat::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+     58 |         return (const float*)codes.data();
+        |                                    ^~~~
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:471: faiss/CMakeFiles/faiss.dir/IndexPreTransform.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:261: faiss/CMakeFiles/faiss.dir/IndexFlatCodes.cpp.o] Error 1
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp: In member function 'virtual void faiss::IndexFlat::reconstruct(faiss::Index::idx_t, float*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp:156:27: error: invalid types 'const int[long unsigned int]' for array subscript
+    156 |     memcpy(recons, &(codes[key * code_size]), code_size);
+        |                           ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp: At global scope:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp:159:6: error: no declaration matches 'void faiss::IndexFlat::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const'
+    159 | void IndexFlat::sa_encode(idx_t n, const float* x, uint8_t* bytes) const {
+        |      ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:66:10: note: candidate is: 'virtual void faiss::IndexFlat::sa_encode(faiss::Index::idx_t, const float*, int*) const'
+     66 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:20:8: note: 'struct faiss::IndexFlat' defined here
+     20 | struct IndexFlat : IndexFlatCodes {
+        |        ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.cpp:165:6: error: no declaration matches 'void faiss::IndexFlat::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const'
+    165 | void IndexFlat::sa_decode(idx_t n, const uint8_t* bytes, float* x) const {
+        |      ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:68:10: note: candidate is: 'virtual void faiss::IndexFlat::sa_decode(faiss::Index::idx_t, const int*, float*) const'
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexFlat.h:20:8: note: 'struct faiss::IndexFlat' defined here
+     20 | struct IndexFlat : IndexFlatCodes {
+        |        ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp: In member function 'void faiss::IndexBinaryHNSW::train(faiss::IndexBinary::idx_t, const uint8_t*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp:188:23: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    188 |     storage->train(n, x);
+        |                       ^
+        |                       |
+        |                       const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:68:48: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::train(idx_t, const int*)'
+     68 |     virtual void train(idx_t n, const uint8_t* x);
+        |                                 ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexScalarQuantizer.h:57:10: error: 'void faiss::IndexScalarQuantizer::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     57 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp: In member function 'virtual void faiss::Clustering::train(idx_t, const float*, faiss::Index&, const float*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp:83:13: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+     83 |             reinterpret_cast<const uint8_t*>(x_in),
+        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        |             |
+        |             const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexScalarQuantizer.h:59:10: error: 'void faiss::IndexScalarQuantizer::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     59 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:102:28: note:   initializing argument 2 of 'void faiss::Clustering::train_encoded(idx_t, const int*, const faiss::Index*, faiss::Index&, const float*)'
+    102 |             const uint8_t* x_in,
+        |             ~~~~~~~~~~~~~~~^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexScalarQuantizer.h:104:10: error: 'void faiss::IndexIVFScalarQuantizer::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+    104 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp: In member function 'void faiss::IndexBinaryHNSW::add(faiss::IndexBinary::idx_t, const uint8_t*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp:227:21: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    227 |     storage->add(n, x);
+        |                     ^
+        |                     |
+        |                     const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:46: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::add(idx_t, const int*)'
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                               ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp: In member function 'void faiss::IndexBinaryHNSW::reconstruct(faiss::IndexBinary::idx_t, uint8_t*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp:240:31: error: cannot convert 'uint8_t*' {aka 'unsigned char*'} to 'int*'
+    240 |     storage->reconstruct(key, recons);
+        |                               ^~~~~~
+        |                               |
+        |                               uint8_t* {aka unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:144:50: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::reconstruct(idx_t, int*) const'
+    144 |     virtual void reconstruct(idx_t key, uint8_t* recons) const;
+        |                                         ~~~~~~~~~^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp: In constructor 'faiss::{anonymous}::FlatHammingDis<HammingComputer>::FlatHammingDis(const faiss::IndexBinaryFlat&)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHNSW.cpp:264:28: error: request for member 'data' in 'storage.xb', which is of non-class type 'const int'
+    264 |               b(storage.xb.data()),
+        |                            ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp: In function 'void faiss::{anonymous}::compute_centroids(size_t, size_t, size_t, size_t, const uint8_t*, const faiss::Index*, const int64_t*, const float*, float*, float*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp:178:43: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    178 |                     codec->sa_decode(1, x + i * line_size, xif);
+        |                                         ~~^~~~~~~~~~~~~~~
+        |                                           |
+        |                                           const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:52: note:   initializing argument 2 of 'virtual void faiss::Index::sa_decode(idx_t, const int*, float*) const'
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                                     ~~~~~~~~~~~~~~~^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp: At global scope:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.cpp:271:6: error: no declaration matches 'void faiss::Clustering::train_encoded(idx_t, const uint8_t*, const faiss::Index*, faiss::Index&, const float*)'
+    271 | void Clustering::train_encoded(
+        |      ^~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:100:10: note: candidate is: 'void faiss::Clustering::train_encoded(idx_t, const int*, const faiss::Index*, faiss::Index&, const float*)'
+    100 |     void train_encoded(
+        |          ^~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:63:8: note: 'struct faiss::Clustering' defined here
+     63 | struct Clustering : ClusteringParameters {
+        |        ^~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp: In member function 'void faiss::Index2Layer::transfer_to_IVFPQ(faiss::IndexIVFPQ&) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp:123:31: error: request for member 'data' in '((const faiss::Index2Layer*)this)->faiss::Index2Layer::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+    123 |     const uint8_t* rp = codes.data();
+        |                               ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp: In member function 'void faiss::IndexBinaryIVF::add_core(faiss::IndexBinary::idx_t, const uint8_t*, const faiss::IndexBinary::idx_t*, const faiss::IndexBinary::idx_t*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:82:30: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+     82 |         quantizer->assign(n, x, scoped_idx.get());
+        |                              ^
+        |                              |
+        |                              const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:129:41: note:   initializing argument 2 of 'void faiss::IndexBinary::assign(idx_t, const int*, idx_t*, idx_t) const'
+    129 |     void assign(idx_t n, const uint8_t* x, idx_t* labels, idx_t k = 1) const;
+        |                          ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp: In member function 'virtual float faiss::{anonymous}::Distance2xXPQ4::operator()(faiss::DistanceComputer::idx_t)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.cpp:226:45: error: request for member 'data' in '((faiss::{anonymous}::Distance2xXPQ4*)this)->faiss::{anonymous}::Distance2xXPQ4::<anonymous>.faiss::{anonymous}::Distance2Level::storage.faiss::Index2Layer::<anonymous>.faiss::IndexFlatCodes::codes', which is of non-class type 'const int'
+    226 |         const uint8_t* code = storage.codes.data() + i * storage.code_size;
+        |                                             ^~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp: In member function 'void faiss::IndexBinaryIVF::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:137:26: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    137 |     quantizer->search(n, x, nprobe, coarse_dis.get(), idx.get());
+        |                          ^
+        |                          |
+        |                          const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:28: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::search(idx_t, const int*, idx_t, int32_t*, idx_t*) const'
+     97 |             const uint8_t* x,
+        |             ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp: In member function 'void faiss::IndexBinaryIVF::search_and_reconstruct(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*, uint8_t*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:186:26: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    186 |     quantizer->search(n, x, nprobe, coarse_dis.get(), idx.get());
+        |                          ^
+        |                          |
+        |                          const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:28: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::search(idx_t, const int*, idx_t, int32_t*, idx_t*) const'
+     97 |             const uint8_t* x,
+        |             ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.cpp:104:6: error: no declaration matches 'void faiss::Index::sa_encode(idx_t, const float*, uint8_t*) const'
+    104 | void Index::sa_encode(idx_t, const float*, uint8_t*) const {
+        |      ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:235:18: note: candidate is: 'virtual void faiss::Index::sa_encode(idx_t, const float*, int*) const'
+    235 |     virtual void sa_encode(idx_t n, const float* x, uint8_t* bytes) const;
+        |                  ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:51:8: note: 'struct faiss::Index' defined here
+     51 | struct Index {
+        |        ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.cpp:108:6: error: no declaration matches 'void faiss::Index::sa_decode(idx_t, const uint8_t*, float*) const'
+    108 | void Index::sa_decode(idx_t, const uint8_t*, float*) const {
+        |      ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:243:18: note: candidate is: 'virtual void faiss::Index::sa_decode(idx_t, const int*, float*) const'
+    243 |     virtual void sa_decode(idx_t n, const uint8_t* bytes, float* x) const;
+        |                  ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index.h:51:8: note: 'struct faiss::Index' defined here
+     51 | struct Index {
+        |        ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp: In member function 'void faiss::IndexBinaryIVF::train(faiss::IndexBinary::idx_t, const uint8_t*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:269:20: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    269 |                 n, x, &codec, clustering_index ? *clustering_index : index_tmp);
+        |                    ^
+        |                    |
+        |                    const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Clustering.h:102:28: note:   initializing argument 2 of 'void faiss::Clustering::train_encoded(idx_t, const int*, const faiss::Index*, faiss::Index&, const float*)'
+    102 |             const uint8_t* x_in,
+        |             ~~~~~~~~~~~~~~~^~~~
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:247: faiss/CMakeFiles/faiss.dir/IndexFlat.cpp.o] Error 1
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:275:39: error: cannot convert 'std::unique_ptr<unsigned char []>::pointer' {aka 'unsigned char*'} to 'const int*'
+    275 |         quantizer->add(clus.k, x_b.get());
+        |                                ~~~~~~~^~
+        |                                       |
+        |                                       std::unique_ptr<unsigned char []>::pointer {aka unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:75:46: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::add(idx_t, const int*)'
+     75 |     virtual void add(idx_t n, const uint8_t* x) = 0;
+        |                               ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:23:6: error: no declaration matches 'void faiss::IndexBinaryFlat::add(faiss::IndexBinary::idx_t, const uint8_t*)'
+     23 | void IndexBinaryFlat::add(idx_t n, const uint8_t* x) {
+        |      ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:10: note: candidate is: 'virtual void faiss::IndexBinaryFlat::add(faiss::IndexBinary::idx_t, const int*)'
+     33 |     void add(idx_t n, const uint8_t* x) override;
+        |          ^~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:20:8: note: 'struct faiss::IndexBinaryFlat' defined here
+     20 | struct IndexBinaryFlat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp: In member function 'virtual void faiss::IndexBinaryFlat::reset()':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:29:8: error: request for member 'clear' in '((faiss::IndexBinaryFlat*)this)->faiss::IndexBinaryFlat::xb', which is of non-class type 'int'
+     29 |     xb.clear();
+        |        ^~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp: At global scope:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:33:6: error: no declaration matches 'void faiss::IndexBinaryFlat::search(faiss::IndexBinary::idx_t, const uint8_t*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const'
+     33 | void IndexBinaryFlat::search(
+        |      ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:37:10: note: candidate is: 'virtual void faiss::IndexBinaryFlat::search(faiss::IndexBinary::idx_t, const int*, faiss::IndexBinary::idx_t, int32_t*, faiss::IndexBinary::idx_t*) const'
+     37 |     void search(
+        |          ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:20:8: note: 'struct faiss::IndexBinaryFlat' defined here
+     20 | struct IndexBinaryFlat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp: In member function 'virtual size_t faiss::IndexBinaryFlat::remove_ids(const faiss::IDSelector&)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:81:28: error: invalid types 'int[faiss::IndexBinary::idx_t {aka long int}]' for array subscript
+     81 |                 memmove(&xb[code_size * j],
+        |                            ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:82:28: error: invalid types 'int[faiss::IndexBinary::idx_t {aka long int}]' for array subscript
+     82 |                         &xb[code_size * i],
+        |                            ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:83:34: error: invalid types 'int[int]' for array subscript
+     83 |                         sizeof(xb[0]) * code_size);
+        |                                  ^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:91:12: error: request for member 'resize' in '((faiss::IndexBinaryFlat*)this)->faiss::IndexBinaryFlat::xb', which is of non-class type 'int'
+     91 |         xb.resize(ntotal * code_size);
+        |            ^~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp: At global scope:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:96:6: error: no declaration matches 'void faiss::IndexBinaryFlat::reconstruct(faiss::IndexBinary::idx_t, uint8_t*) const'
+     96 | void IndexBinaryFlat::reconstruct(idx_t key, uint8_t* recons) const {
+        |      ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:50:10: note: candidate is: 'virtual void faiss::IndexBinaryFlat::reconstruct(faiss::IndexBinary::idx_t, int*) const'
+     50 |     void reconstruct(idx_t key, uint8_t* recons) const override;
+        |          ^~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:20:8: note: 'struct faiss::IndexBinaryFlat' defined here
+     20 | struct IndexBinaryFlat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.cpp:100:6: error: no declaration matches 'void faiss::IndexBinaryFlat::range_search(faiss::IndexBinary::idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const'
+    100 | void IndexBinaryFlat::range_search(
+        |      ^~~~~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:44:10: note: candidate is: 'virtual void faiss::IndexBinaryFlat::range_search(faiss::IndexBinary::idx_t, const int*, int, faiss::RangeSearchResult*) const'
+     44 |     void range_search(
+        |          ^~~~~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:20:8: note: 'struct faiss::IndexBinaryFlat' defined here
+     20 | struct IndexBinaryFlat : IndexBinary {
+        |        ^~~~~~~~~~~~~~~
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:205: faiss/CMakeFiles/faiss.dir/IndexBinaryHNSW.cpp.o] Error 1
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp: In member function 'void faiss::IndexBinaryIVF::range_search(faiss::IndexBinary::idx_t, const uint8_t*, int, faiss::RangeSearchResult*) const':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryIVF.cpp:659:26: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    659 |     quantizer->search(n, x, nprobe, coarse_dis.get(), idx.get());
+        |                          ^
+        |                          |
+        |                          const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinary.h:97:28: note:   initializing argument 2 of 'virtual void faiss::IndexBinary::search(idx_t, const int*, idx_t, int32_t*, idx_t*) const'
+     97 |             const uint8_t* x,
+        |             ~~~~~~~~~~~~~~~^
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:135: faiss/CMakeFiles/faiss.dir/Index2Layer.cpp.o] Error 1
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.cpp:30:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:67:10: error: 'void faiss::Index2Layer::sa_encode(faiss::Index::idx_t, const float*, uint8_t*) const' marked 'override', but does not override
+     67 |     void sa_encode(idx_t n, const float* x, uint8_t* bytes) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/Index2Layer.h:68:10: error: 'void faiss::Index2Layer::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     68 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp: In member function 'void faiss::IndexBinaryMultiHash::add(faiss::IndexBinary::idx_t, const uint8_t*)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp:326:21: error: cannot convert 'const uint8_t*' {aka 'const unsigned char*'} to 'const int*'
+    326 |     storage->add(n, x);
+        |                     ^
+        |                     |
+        |                     const uint8_t* {aka const unsigned char*}
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryFlat.h:33:38: note:   initializing argument 2 of 'virtual void faiss::IndexBinaryFlat::add(faiss::IndexBinary::idx_t, const int*)'
+     33 |     void add(idx_t n, const uint8_t* x) override;
+        |                       ~~~~~~~~~~~~~~~^
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp: In function 'void faiss::{anonymous}::verify_shortlist(const faiss::IndexBinaryFlat&, const uint8_t*, const std::unordered_set<long int>&, SearchResults&)':
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexBinaryHash.cpp:355:37: error: request for member 'data' in 'index.xb', which is of non-class type 'const int'
+    355 |     const uint8_t* codes = index.xb.data();
+        |                                     ^~~~
+  In file included from /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexHNSW.cpp:32:
+  /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/faiss-sys-0.6.2/faiss/faiss/IndexIVFPQ.h:70:10: error: 'void faiss::IndexIVFPQ::sa_decode(faiss::Index::idx_t, const uint8_t*, float*) const' marked 'override', but does not override
+     70 |     void sa_decode(idx_t n, const uint8_t* bytes, float* x) const override;
+        |          ^~~~~~~~~
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:177: faiss/CMakeFiles/faiss.dir/IndexBinaryFlat.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:121: faiss/CMakeFiles/faiss.dir/Index.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:93: faiss/CMakeFiles/faiss.dir/Clustering.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:429: faiss/CMakeFiles/faiss.dir/IndexNSG.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:401: faiss/CMakeFiles/faiss.dir/IndexNNDescent.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:275: faiss/CMakeFiles/faiss.dir/IndexHNSW.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:219: faiss/CMakeFiles/faiss.dir/IndexBinaryHash.cpp.o] Error 1
+  gmake[2]: *** [faiss/CMakeFiles/faiss.dir/build.make:233: faiss/CMakeFiles/faiss.dir/IndexBinaryIVF.cpp.o] Error 1
+  gmake[1]: *** [CMakeFiles/Makefile2:166: faiss/CMakeFiles/faiss.dir/all] Error 2
+  gmake: *** [Makefile:139: all] Error 2
+  thread 'main' panicked at /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cmake-0.1.54/src/lib.rs:1119:5:
+
+  command did not execute successfully, got: exit status: 2
+
+  build script failed, must exit now
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

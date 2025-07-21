@@ -1,0 +1,23 @@
+[package]
+name = "verax-mgr"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["local"]
+local = []
+
+[dependencies]
+atlas-http = "0.2.3"
+bincode = "1.3.3"
+cicero-interfaces = { path = "../cicero-interfaces" }
+falcon-cli = "0.1.9"
+hex = "0.4.3"
+lazy_static = "1.5.0"
+rand = "0.8.5"
+serde = { version = "1.0.207", features = ["derive"] }
+serde_json = "1.0.124"
+sophia = { path = "../sophia", features = ["compile","cicero" ] }
+verax = { path="./lib" }
+
+

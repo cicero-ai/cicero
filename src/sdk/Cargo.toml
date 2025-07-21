@@ -1,0 +1,15 @@
+[package]
+name = "cicero-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name="cicero_sdk"
+
+
+[dependencies]
+atlas-web = { path="../deps/atlas" }
+serde = "1.0.198"
+serde_derive = "1.0.198"
+omnidata = { path="../deps/omnidata" }
+ 

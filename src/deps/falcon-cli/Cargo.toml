@@ -1,0 +1,30 @@
+[package]
+name = "falcon-cli"
+version = "0.1.9"
+authors = ["Matt Dizak"]
+homepage = "https://apexpl.io/"
+keywords = ["cli", "command-line", "terminal", "interactive"]
+categories = ["parsing-tools"] 
+autotests = false
+description = "Easily and efficiently develop quality and fully featured CLI apps."
+readme = "Readme.md"
+license = "MIT"
+repository = "https://github.com/mdizak/rust-falcon-cli"
+edition = "2021"
+
+[lib]
+name = "falcon_cli"
+
+[features]
+default = []
+log = ["dep:log"]
+
+[dependencies]
+indexmap = { version = "2.7.1", features = ["serde"] }
+log = { version = "0.4.26", optional = true }
+rpassword = "7.2.0"
+strsim = "0.10.0"
+textwrap = "0.16.0"
+zxcvbn = "2.2.2"
+
+

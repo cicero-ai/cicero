@@ -9,6 +9,7 @@
 pub use self::error::Error;
 pub use self::sophia::Sophia;
 
+pub mod context;
 pub mod error;
 pub mod interpreter;
 pub mod pos_tagger;

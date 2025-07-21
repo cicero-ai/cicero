@@ -1,0 +1,10 @@
+0000000000000000000000000000000000000000 0034c19caf685603a4507a38915358faee5388d0 Matt Dizak <matt@apexpl.io> 1707915626 -0700	clone: from ssh://github_mdizak/mdizak/rust-atlas-http/
+0034c19caf685603a4507a38915358faee5388d0 6a5ca6d333f8152fc64e6152af5c11d0053f6e30 Matt Dizak <matt@apexpl.io> 1707915762 -0700	commit: Relase v0.2
+6a5ca6d333f8152fc64e6152af5c11d0053f6e30 fe515cf47c3b2318a12a04be27ef42ab64f2eee8 Matt Dizak <matt@apexpl.io> 1707915810 -0700	commit: Release v0.2
+fe515cf47c3b2318a12a04be27ef42ab64f2eee8 26993aa8c2ba5797ff3a608bf6892ce9fdc82115 Matt Dizak <matt@apexpl.io> 1707915916 -0700	commit: Released v0.2.0
+26993aa8c2ba5797ff3a608bf6892ce9fdc82115 42248e5cf135d5b97798e6c1a7b9e432b4d457cc Matt Dizak <matt@apexpl.io> 1711264759 -0600	commit: Dev update
+42248e5cf135d5b97798e6c1a7b9e432b4d457cc d82aaea13ddeb0d9bd7cc22dc1985adbd28c968a Matt Dizak <matt@apexpl.io> 1711265124 -0600	commit: Quickly removed debug statement
+d82aaea13ddeb0d9bd7cc22dc1985adbd28c968a fb89ac0b437394af4971222bea6740eb3a961496 Matt Dizak <matt@apexpl.io> 1719495299 -0600	commit: Dev update
+fb89ac0b437394af4971222bea6740eb3a961496 2929d9edc89df2106d4ed4420348b4cc0a45be19 Matt Dizak <matt@apexpl.io> 1719496092 -0600	commit: Update
+2929d9edc89df2106d4ed4420348b4cc0a45be19 b6908d7d729f5b3f1e87d1e7d027772a79297e29 Matt Dizak <matt@apexpl.io> 1719496200 -0600	commit: Update to Cargo.toml
+b6908d7d729f5b3f1e87d1e7d027772a79297e29 849d280c9b09d76c5575b7f082672911f9a2885c Matt Dizak <matt@apexpl.io> 1719496403 -0600	commit: Update

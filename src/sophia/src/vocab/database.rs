@@ -153,7 +153,7 @@ impl Default for VocabDatabaseMeta {
         VocabDatabaseMeta {
             version: (1, 0, 0),
             language: "en".to_string(),
-            author: "cicero".to_string(),
+            author: "Aquila Labs".to_string(),
             creation_time: String::new(),
             sha256_hash: String::new(),
             signature: String::new(),

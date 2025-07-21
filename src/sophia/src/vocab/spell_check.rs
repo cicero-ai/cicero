@@ -64,7 +64,7 @@ impl SpellChecker {
         let search = self.cohorts.get(&cohort)?;
         for index in search.iter() {
             let chk_token = worddb.id2token.get(index).unwrap();
-            let distance = self.levenshtein(&word, &chk_token.word);
+            let distance = self.levenshtein(word, &chk_token.word);
             if distance <= 2 || distance < min_distance {
                 min_distance = distance;
                 min_token = chk_token.clone();

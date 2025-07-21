@@ -1,0 +1,14 @@
+   Compiling cicero-client v0.1.0 (/home/boxer/devel/cicero/cicero/src/cicero/client)
+error[E0308]: mismatched types
+  --> cicero/client/src/echo/setup/discover.rs:54:19
+   |
+54 |         if let Ok(Ok(Some(addr))) = task.await {
+   |                   ^^^^^^^^^^^^^^    ---------- this expression has type `Result<std::option::Option<std::net::SocketAddr>, JoinError>`
+   |                   |
+   |                   expected `Option<SocketAddr>`, found `Result<_, _>`
+   |
+   = note: expected enum `std::option::Option<std::net::SocketAddr>`
+              found enum `Result<_, _>`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `cicero-client` (bin "cicero-client") due to 1 previous error

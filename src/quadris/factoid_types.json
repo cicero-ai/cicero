@@ -1,0 +1,181 @@
+
+{
+  "1": {
+    "genre": "The specific style or category within the art form (e.g., jazz music, impressionist painting)",
+    "historical_context": "Key historical events or periods related to this art/culture",
+    "notable_figures": "Famous artists, performers, or contributors in this field",
+    "techniques": "Methods or skills used in creating the art",
+    "cultural_significance": "How this art form impacts or reflects its culture of origin"
+  },
+  "2": {
+    "cause": "The specific issue or goal of the involvement (e.g., environmentalism, education)",
+    "organization": "Groups or entities associated with the activity",
+    "impact": "Tangible outcomes or effects of the involvement",
+    "event_type": "Nature of the events attended (e.g., rally, fundraiser)",
+    "frequency": "How often the person engages in these activities"
+  },
+  "3": {
+    "industry": "The professional field or sector",
+    "skills": "Specific abilities developed or required",
+    "milestones": "Key achievements or promotions",
+    "company_culture": "Values or environment of the workplace",
+    "job_role": "Specific duties or titles held"
+  },
+  "4": {
+    "duration": "Length of time spent on the routine",
+    "location": "Where the routine takes place",
+    "tools": "Objects or aids used in the routine",
+    "benefit": "Positive effects of maintaining the routine",
+    "frequency": "How often the routine occurs"
+  },
+  "5": {
+    "subject": "The academic or intellectual field of interest",
+    "resources": "Books, courses, or tools used to learn",
+    "level": "Depth of knowledge or study (e.g., beginner, advanced)",
+    "application": "How the knowledge is used in life",
+    "institutions": "Schools or organizations tied to the interest"
+  },
+  "6": {
+    "genre": "Category of media (e.g., sci-fi, drama)",
+    "creator": "Authors, directors, or producers involved",
+    "platform": "Where the media is consumed (e.g., Netflix, Kindle)",
+    "themes": "Central ideas or messages in the content",
+    "popularity": "Cultural impact or audience reception"
+  },
+  "7": {
+    "activity_type": "Specific exercise or fitness practice (e.g., yoga, weightlifting)",
+    "equipment": "Gear or tools used",
+    "intensity": "Level of effort or difficulty",
+    "location": "Where the exercise occurs (e.g., gym, outdoors)",
+    "health_benefits": "Physical or mental advantages gained"
+  },
+  "8": {
+    "relationship_type": "Nature of the connection (e.g., spouse, parent)",
+    "milestones": "Significant events in the relationship",
+    "traditions": "Shared customs or habits",
+    "challenges": "Common difficulties faced",
+    "communication_style": "How interaction typically occurs"
+  },
+  "9": {
+    "cuisine": "Cultural origin or style of the food/drink",
+    "ingredients": "Key components or flavors",
+    "preparation": "How it’s made or served",
+    "popularity": "How widespread or favored it is",
+    "occasion": "Typical context for consumption (e.g., holiday, casual)"
+  },
+  "10": {
+    "practice": "Specific wellness activity (e.g., meditation, therapy)",
+    "frequency": "How often it’s done",
+    "benefit": "Mental or physical improvements",
+    "resources": "Tools or professionals involved",
+    "trigger": "What prompts the need for this practice"
+  },
+  "11": {
+    "medium": "The form of creative expression (e.g., watercolor, poetry)",
+    "inspiration": "Sources or influences for the hobby",
+    "skill_level": "Proficiency in the activity",
+    "output": "Tangible results (e.g., a novel, a sculpture)",
+    "community": "Groups or peers involved in the hobby"
+  },
+  "12": {
+    "style": "Aesthetic or design preference (e.g., minimalist, rustic)",
+    "task": "Specific maintenance or DIY activity",
+    "materials": "Items or tools used",
+    "cost": "Financial investment in the home",
+    "location": "Part of the home affected (e.g., kitchen, garden)"
+  },
+  "13": {
+    "goal": "The aim of the growth (e.g., confidence, leadership)",
+    "method": "Approach or technique used",
+    "progress": "Measurable improvements over time",
+    "resources": "Books, mentors, or courses involved",
+    "motivation": "Reason for pursuing this development"
+  },
+  "14": {
+    "category": "Type of expense or income (e.g., savings, leisure)",
+    "tool": "Financial tools or apps used",
+    "strategy": "Approach to managing money",
+    "goal": "Financial objectives (e.g., debt reduction)",
+    "frequency": "How often budgeting occurs"
+  },
+  "15": {
+    "species": "Type of animal (e.g., dog, fish)",
+    "breed": "Specific variety within the species",
+    "care": "Tasks or responsibilities involved",
+    "traits": "Personality or physical characteristics",
+    "origin": "Where the animal came from"
+  },
+  "16": {
+    "cause": "The focus of the philanthropy",
+    "organization": "Charities or groups supported",
+    "contribution": "Type of support given (e.g., money, time)",
+    "impact": "Effects of the efforts",
+    "motivation": "Reason for involvement"
+  },
+  "17": {
+    "ideology": "Core political stance (e.g., liberal, conservative)",
+    "issue": "Specific topics of concern",
+    "figures": "Influential politicians or thinkers",
+    "activity": "Actions taken (e.g., voting, protesting)",
+    "origin": "How beliefs were formed"
+  },
+  "18": {
+    "style": "Fashion or shopping preference",
+    "brand": "Favored companies or designers",
+    "frequency": "How often shopping occurs",
+    "item_type": "Categories of purchases (e.g., shoes, electronics)",
+    "motivation": "Reason for the purchase (e.g., need, trend)"
+  },
+  "19": {
+    "setting": "Where socializing happens (e.g., bar, online)",
+    "group_size": "Typical number of people involved",
+    "activity": "What’s done during socializing",
+    "frequency": "How often it occurs",
+    "connection": "Type of relationships formed"
+  },
+  "20": {
+    "belief_system": "Specific faith or philosophy",
+    "practices": "Rituals or habits tied to spirituality",
+    "community": "Groups or places of worship involved",
+    "texts": "Sacred or guiding writings",
+    "origin": "How the belief was adopted"
+  },
+  "21": {
+    "type": "Category of sport or game (e.g., soccer, chess)",
+    "skill_level": "Proficiency or competitiveness",
+    "equipment": "Gear or tools required",
+    "team": "Group or players involved",
+    "rules": "Key guidelines of the activity"
+  },
+  "22": {
+    "device": "Hardware or platform used",
+    "software": "Programs or games involved",
+    "skill": "Technical abilities developed",
+    "community": "Online or local groups engaged with",
+    "purpose": "Goal of use (e.g., work, fun)"
+  },
+  "23": {
+    "destination": "Location visited",
+    "culture": "Local customs or traditions",
+    "activity": "What was done there",
+    "duration": "Length of the trip",
+    "companions": "Who traveled with"
+  },
+  "24": {
+    "vehicle_type": "Kind of transportation (e.g., car, bike)",
+    "brand": "Manufacturer or model",
+    "usage": "Primary purpose (e.g., commute, leisure)",
+    "features": "Notable aspects (e.g., speed, fuel efficiency)",
+    "maintenance": "Care or repairs required"
+  },
+  "general": {
+    "location": "Geographic place tied to the data point",
+    "date": "When the event or interest occurred",
+    "emotion": "Feelings associated with it",
+    "people": "Individuals involved or influential",
+    "cultural_context": "Broader societal or regional influences"
+  }
+}
+
+
+

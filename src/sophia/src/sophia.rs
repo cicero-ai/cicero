@@ -185,7 +185,7 @@ impl Sophia {
         let mut res = token.clone();
 
         res.index = *index;
-        res.potential_pos = pos_map.keys().map(|tag| *tag).collect();
+        res.potential_pos = pos_map.keys().copied().collect();
 
         Some(res)
     }

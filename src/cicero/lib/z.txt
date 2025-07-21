@@ -1,0 +1,366 @@
+warning: /home/boxer/devel/cicero/cicero/src/Cargo.toml: unused manifest key: fmt
+   Compiling cicero v0.1.0 (/home/boxer/devel/cicero/cicero/src/cicero/lib)
+error[E0432]: unresolved import `argon2`
+ --> cicero/lib/src/security/forge.rs:7:5
+  |
+7 | use argon2::Argon2;
+  |     ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0432]: unresolved import `sha2`
+ --> cicero/lib/src/security/forge.rs:8:5
+  |
+8 | use sha2::{Sha256, Digest};
+  |     ^^^^ use of undeclared crate or module `sha2`
+
+error[E0432]: unresolved import `crate::error`
+  --> cicero/lib/src/security/forge.rs:10:12
+   |
+10 | use crate::error::Error;
+   |            ^^^^^
+   |            |
+   |            unresolved import
+   |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `crate::error`
+ --> cicero/lib/src/security/postman.rs:5:12
+  |
+5 | use crate::error::Error;
+  |            ^^^^^
+  |            |
+  |            unresolved import
+  |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `sha2`
+ --> cicero/lib/src/security/postman.rs:9:5
+  |
+9 | use sha2::Sha256;
+  |     ^^^^ use of undeclared crate or module `sha2`
+
+error[E0432]: unresolved import `crate::error`
+ --> cicero/lib/src/security/user_key.rs:7:12
+  |
+7 | use crate::error::Error;
+  |            ^^^^^
+  |            |
+  |            unresolved import
+  |            help: a similar path exists: `core::error`
+
+error[E0432]: unresolved import `super::Role`
+ --> cicero/lib/src/security/user_key.rs:9:20
+  |
+9 | use super::{forge, Role, Postman};
+  |                    ^^^^ no `Role` in `security`
+
+error[E0432]: unresolved import `serde_derive`
+ --> cicero/lib/src/security/user_key.rs:5:5
+  |
+5 | use serde_derive::{Serialize, Deserialize};
+  |     ^^^^^^^^^^^^ use of undeclared crate or module `serde_derive`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:30
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                              ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:83
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                                                                                   ^^^^^^ use of undeclared crate or module `argon2`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `argon2`
+  --> cicero/lib/src/security/forge.rs:98:59
+   |
+98 |     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |                                                           ^^^^^^ use of undeclared crate or module `argon2`
+   |
+help: consider importing this enum
+   |
+2  + use uuid::Version;
+   |
+help: if you import `Version`, refer to it directly
+   |
+98 -     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, argon2::Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+98 +     let argon2 = Argon2::new(argon2::Algorithm::Argon2id, Version::V0x13, argon2::Params::new(19456, 2, 1, None).unwrap());
+   |
+
+error[E0433]: failed to resolve: could not find `distributions` in `rand`
+  --> cicero/lib/src/utils/random.rs:32:36
+   |
+32 |         .map(|()| rng.sample(rand::distributions::Uniform::from(0..charset.len())))
+   |                                    ^^^^^^^^^^^^^ could not find `distributions` in `rand`
+   |
+help: consider importing this struct
+   |
+2  + use rand::distr::Uniform;
+   |
+help: if you import `Uniform`, refer to it directly
+   |
+32 -         .map(|()| rng.sample(rand::distributions::Uniform::from(0..charset.len())))
+32 +         .map(|()| rng.sample(Uniform::from(0..charset.len())))
+   |
+
+error[E0433]: failed to resolve: use of undeclared type `PathBuf`
+  --> cicero/lib/src/utils/sys.rs:16:36
+   |
+16 |                 .unwrap_or_else(|| PathBuf::from("/tmp"))
+   |                                    ^^^^^^^ use of undeclared type `PathBuf`
+   |
+help: consider importing this struct
+   |
+2  + use std::path::PathBuf;
+   |
+
+error[E0603]: function `get_nonce` is private
+   --> cicero/lib/src/security/postman.rs:86:28
+    |
+86  |         let nonce = forge::get_nonce(previous_nonce);
+    |                            ^^^^^^^^^ private function
+    |
+note: the function `get_nonce` is defined here
+   --> cicero/lib/src/security/forge.rs:121:1
+    |
+121 | fn get_nonce(previous_nonce: Option<[u8; 32]>) -> [u8; 32] {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:21:40
+   |
+21 |     let encryption_key: [u8; 32] = rng.gen();
+   |                                        ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:22:28
+   |
+22 |     let iv: [u8; 12] = rng.gen();
+   |                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:28:37
+   |
+28 |     let password_iv: [u8; 12] = rng.gen();
+   |                                     ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0425]: cannot find function `derive_child` in this scope
+  --> cicero/lib/src/security/forge.rs:31:30
+   |
+31 |     let (child_key, nonce) = derive_child(&argon_hash, None);
+   |                              ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `derive_child` in this scope
+  --> cicero/lib/src/security/forge.rs:70:26
+   |
+70 |     let (child_key, _) = derive_child(&argon_hash, Some(nonce.try_into()?));
+   |                          ^^^^^^^^^^^^ not found in this scope
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/forge.rs:97:54
+   |
+97 |     let salt = previous_salt.unwrap_or_else(|| OsRng.gen());
+   |                                                      ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+   --> cicero/lib/src/security/forge.rs:106:56
+    |
+106 |     let nonce = previous_nonce.unwrap_or_else(|| OsRng.gen());
+    |                                                        ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+    |
+    = note: the following trait bounds were not satisfied:
+            `aes_gcm::aead::OsRng: rand::RngCore`
+            which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+   --> cicero/lib/src/security/forge.rs:122:44
+    |
+122 |     previous_nonce.unwrap_or_else(|| OsRng.gen())
+    |                                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+    |
+    = note: the following trait bounds were not satisfied:
+            `aes_gcm::aead::OsRng: rand::RngCore`
+            which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:32:44
+   |
+32 |         let encryption_key: [u8; 32] = rng.gen();
+   |                                            ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:33:32
+   |
+33 |         let iv: [u8; 12] = rng.gen();
+   |                                ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: the method `gen` exists for struct `OsRng`, but its trait bounds were not satisfied
+  --> cicero/lib/src/security/postman.rs:39:38
+   |
+39 |         let outer_iv: [u8; 12] = rng.gen();
+   |                                      ^^^ method cannot be called on `OsRng` due to unsatisfied trait bounds
+   |
+  ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+   |
+48 | pub struct OsRng;
+   | ---------------- doesn't satisfy `aes_gcm::aead::OsRng: Rng` or `aes_gcm::aead::OsRng: rand::RngCore`
+   |
+   = note: the following trait bounds were not satisfied:
+           `aes_gcm::aead::OsRng: rand::RngCore`
+           which is required by `aes_gcm::aead::OsRng: Rng`
+
+error[E0599]: no method named `derive_child` found for reference `&Postman` in the current scope
+  --> cicero/lib/src/security/postman.rs:40:39
+   |
+40 |         let (child_key, nonce) = self.derive_child(None);
+   |                                       ^^^^^^^^^^^^ method not found in `&Postman`
+
+error[E0599]: no method named `derive_child` found for reference `&Postman` in the current scope
+  --> cicero/lib/src/security/postman.rs:70:35
+   |
+70 |         let (child_key, _) = self.derive_child(Some(nonce.try_into()?));
+   |                                   ^^^^^^^^^^^^ method not found in `&Postman`
+
+error[E0277]: the trait bound `rand_core::OsRng: aes_gcm::aead::rand_core::RngCore` is not satisfied because the trait comes from a different crate version
+   --> cicero/lib/src/security/user_key.rs:26:40
+    |
+26  |         let secret = StaticSecret::new(OsRng);
+    |                                        ^^^^^ the trait `aes_gcm::aead::rand_core::RngCore` is not implemented for `rand_core::OsRng`
+    |
+note: there are multiple different versions of crate `rand_core` in the dependency graph
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/lib.rs:142:1
+    |
+142 | pub trait RngCore {
+    | ^^^^^^^^^^^^^^^^^ this is the required trait
+    |
+   ::: cicero/lib/src/security/forge.rs:2:5
+    |
+2   | use aes_gcm::aead::{Aead, AeadCore, KeyInit, OsRng};
+    |     ------- one version of crate `rand_core` is used here, as a dependency of crate `crypto_common`
+    |
+   ::: cicero/lib/src/security/user_key.rs:4:5
+    |
+4   | use rand_core::OsRng;
+    |     --------- one version of crate `rand_core` is used here, as a direct dependency of the current crate
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/os.rs:47:1
+    |
+47  | pub struct OsRng;
+    | ---------------- this type doesn't implement the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- this type implements the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/block.rs:67:1
+    |
+67  | pub trait BlockRngCore {
+    | ---------------------- this is the found trait
+    = note: two types coming from two different versions of the same crate are different types even if they look the same
+    = help: you can use `cargo tree` to explore your dependency tree
+
+error[E0277]: the trait bound `rand_core::OsRng: aes_gcm::aead::rand_core::CryptoRng` is not satisfied because the trait comes from a different crate version
+   --> cicero/lib/src/security/user_key.rs:26:40
+    |
+26  |         let secret = StaticSecret::new(OsRng);
+    |                                        ^^^^^ the trait `aes_gcm::aead::rand_core::CryptoRng` is not implemented for `rand_core::OsRng`
+    |
+note: there are multiple different versions of crate `rand_core` in the dependency graph
+   --> /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/lib.rs:209:1
+    |
+209 | pub trait CryptoRng {}
+    | ^^^^^^^^^^^^^^^^^^^ this is the required trait
+    |
+   ::: cicero/lib/src/security/forge.rs:2:5
+    |
+2   | use aes_gcm::aead::{Aead, AeadCore, KeyInit, OsRng};
+    |     ------- one version of crate `rand_core` is used here, as a dependency of crate `crypto_common`
+    |
+   ::: cicero/lib/src/security/user_key.rs:4:5
+    |
+4   | use rand_core::OsRng;
+    |     --------- one version of crate `rand_core` is used here, as a direct dependency of the current crate
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/os.rs:47:1
+    |
+47  | pub struct OsRng;
+    | ---------------- this type doesn't implement the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.6.4/src/os.rs:48:1
+    |
+48  | pub struct OsRng;
+    | ---------------- this type implements the required trait
+    |
+   ::: /home/boxer/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rand_core-0.9.2/src/block.rs:67:1
+    |
+67  | pub trait BlockRngCore {
+    | ---------------------- this is the found trait
+    = note: two types coming from two different versions of the same crate are different types even if they look the same
+    = help: you can use `cargo tree` to explore your dependency tree
+
+Some errors have detailed explanations: E0277, E0425, E0432, E0433, E0599, E0603.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `cicero` (lib) due to 29 previous errors

@@ -1,0 +1,14 @@
+0000000000000000000000000000000000000000 233e57f1c75b160ba1b3e92ea1a858507be33f30 Matt Dizak <matt@apexpl.io> 1696789940 -0600	commit (initial): Initial commit
+233e57f1c75b160ba1b3e92ea1a858507be33f30 895f91b6a74ec5dd51b5a9e1f4f6a4fabe9aa92d Matt Dizak <matt@apexpl.io> 1696790342 -0600	commit: Updated keyords in Cargo.toml
+895f91b6a74ec5dd51b5a9e1f4f6a4fabe9aa92d edd062323bc0cfb43fde5dc6b9fc3197281d512e Matt Dizak <matt@apexpl.io> 1696790574 -0600	commit: Updated Cargo.toml
+edd062323bc0cfb43fde5dc6b9fc3197281d512e 412300e0bbbba72460798bccbbe0e0786a8e68e4 Matt Dizak <matt@apexpl.io> 1696790663 -0600	commit: Forgot to run cargo fmt
+412300e0bbbba72460798bccbbe0e0786a8e68e4 c20d66a46416ce3cf681ec5714f91c8f2d61b841 Matt Dizak <matt@apexpl.io> 1696791176 -0600	commit: Removed readme file from Cargo.toml
+c20d66a46416ce3cf681ec5714f91c8f2d61b841 70dea66117f76fa697455911c88ec044681fe31b Matt Dizak <matt@apexpl.io> 1696791192 -0600	commit: Removed readme file from Cargo.toml
+70dea66117f76fa697455911c88ec044681fe31b b45862dcd766f8547e4a88c7e66e53acc3e548e8 Matt Dizak <matt@apexpl.io> 1696791456 -0600	commit: Added usage.md file
+b45862dcd766f8547e4a88c7e66e53acc3e548e8 c096e0a6a008c9ba43d177390b30b6581d82a530 Matt Dizak <matt@apexpl.io> 1696791657 -0600	commit: Updated Readme.md
+c096e0a6a008c9ba43d177390b30b6581d82a530 d36a3db072b7b1ab99f7ac62d9e2495f316d1741 Matt Dizak <matt@apexpl.io> 1696791777 -0600	commit: Updated Readme.md
+d36a3db072b7b1ab99f7ac62d9e2495f316d1741 6160a4372088266eea64269bdef8c1d9330eed07 Matt Dizak <matt@apexpl.io> 1696880677 -0600	commit: Converted cli_send() and cli_error() into macros that function same as print!(), but wordwrap to 75 chars.
+6160a4372088266eea64269bdef8c1d9330eed07 3be632a7a63ce09de30692f0c6eeda7396f9a05a Matt Dizak <matt@apexpl.io> 1696883155 -0600	commit: Modified cli_erro!() macro
+3be632a7a63ce09de30692f0c6eeda7396f9a05a 27be1e87f80b7edc198de808fcaaf428745f5576 Matt Dizak <matt@apexpl.io> 1711260976 -0600	commit: Updated cli_send!() and cli_error!() macros
+27be1e87f80b7edc198de808fcaaf428745f5576 8a01cc9d114efd9c096709078b6f7ac22d2fbb5d Matt Dizak <matt@apexpl.io> 1719496491 -0600	commit: Dev update
+8a01cc9d114efd9c096709078b6f7ac22d2fbb5d 2d8a23cee441a585d3d162cb94cf20cb24bb8d82 Matt Dizak <matt@apexpl.io> 1719496537 -0600	commit: Update

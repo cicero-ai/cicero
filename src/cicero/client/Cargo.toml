@@ -1,0 +1,24 @@
+[package]
+name = "cicero-client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+atlas-http = { path = "../../deps/http" }
+cicero = { path = "../lib" }
+falcon-cli = { path = "../../deps/falcon-cli", features = ["log"] }
+futures-util = "0.3.31"
+lazy_static = "1.5.0"
+local-ip-address = "0.6.3"
+log = "0.4.26"
+rand = "0.9.0"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
+serde_yaml = "0.9.34"
+tauri = "2.3.1"
+tokio = { version = "1.43.0", features = ["full"] }
+tokio-tungstenite = "0.26.2"
+tungstenite = "0.26.2"
+uuid = { version = "1.15.0", features = ["serde"] }
+
+

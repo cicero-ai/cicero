@@ -29,6 +29,12 @@ pub enum PhraseIntent {
     request,
 }
 
+impl Default for PhraseIntents {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PhraseIntents {
     /// Creates a new phrase intents node
     pub fn new() -> Self {

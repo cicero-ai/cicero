@@ -4,7 +4,7 @@
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use super::{Token, TokenCleaner, TokenizedInput, MWE};
-use crate::pos_tagger::POSTag;
+use crate::pos_tagger::{POSTag, POSTaggerContext};
 use crate::vocab::{MWEType, VocabDatabase};
 use regex::Regex;
 
@@ -20,8 +20,10 @@ static PREFIX_FUTURE_DATE_WORDS: &[&str] = &["next", "following"];
 pub struct Tokenizer {}
 
 /// A buffer for tokenization, storing output tokens, words, and state for handling MWEs, possessives, and special tags.
+#[derive(Default)]
 pub struct Buffer {
     pub output: TokenizedInput,
+    pub context: POSTaggerContext,
     pub words: Vec<String>,
     pub prev_tag: String,
     pub is_possessive: bool,
@@ -56,7 +58,7 @@ impl Tokenizer {
             // Initial check
             if buffer.prev_tag.as_str() == "|num|" && vocab.preprocess.hashes.contains_key(&word) {
                 let (tag, unit) = vocab.preprocess.hashes.get(&word).unwrap();
-                buffer.push_token(Token::special(&word, tag, "", unit, vocab));
+                buffer.push_token(Token::special(&word, tag, "", unit, vocab), &vocab);
                 continue;
             }
             let mut token = Token::new(&word, vocab);
@@ -74,18 +76,18 @@ impl Tokenizer {
             self.check_mwe(&word, &token, vocab, &mut buffer);
 
             // Add token
-            buffer.push_token(token);
-            buffer.push_suffix();
+            buffer.push_token(token, &vocab);
+            buffer.push_suffix(&vocab);
         }
 
         if !buffer.suffix.is_empty() {
             //buffer.output.tokens.extend_from_slice(&buffer.suffix);
-            buffer.push_suffix();
+            buffer.push_suffix(&vocab);
             buffer.suffix.clear();
         }
 
         // Apply POS tagging
-        vocab.words.pos_tagger.apply(&mut buffer.output, &vocab);
+        vocab.words.pos_tagger.apply(&mut buffer.output, vocab);
 
         buffer.output
     }
@@ -130,10 +132,10 @@ impl Tokenizer {
         } else if buffer.prev_tag.as_str() == "|num|"
             || ["|day_of_week|", "|month|"].contains(&tag.as_str())
         {
-            buffer.push_token(Token::special(&word, tag, "", value, vocab));
+            buffer.push_token(Token::special(&word, tag, "", value, vocab), &vocab);
             return String::new();
         } else if tag.as_str() == "|num|" {
-            buffer.push_token(Token::special(&word, tag, value, "", vocab));
+            buffer.push_token(Token::special(&word, tag, value, "", vocab), &vocab);
             return String::new();
         }
 
@@ -255,14 +257,7 @@ impl Buffer {
         Self {
             output: TokenizedInput::new(input),
             words: clean_str.split(" ").map(|w| w.to_string()).collect::<Vec<String>>(),
-            is_possessive: false,
-            not_position: None,
-            have_position: None,
-            had_position: None,
-            prev_tag: String::new(),
-            suffix: Vec::new(),
-            mwe_length: 0,
-            mwe_scoring_length: 0,
+            ..Default::default()
         }
     }
 
@@ -353,7 +348,7 @@ impl Buffer {
     }
 
     /// Adds a token to the buffer, handling system tag expansion, MWEs, and properties like negation and possession.
-    pub fn push_token(&mut self, mut token: Token) {
+    pub fn push_token(&mut self, mut token: Token, vocab: &VocabDatabase) {
         // Expand system tag
         if self.expand_system_tag(&token) {
             return;
@@ -391,6 +386,7 @@ impl Buffer {
         } else if token.word.as_str() == "had" {
             self.had_position = Some(self.output.tokens.len());
         }
+        self.context.push(&token, &vocab);
         self.output.tokens.push(token);
 
         // Update mwe as needed
@@ -479,8 +475,9 @@ impl Buffer {
     }
 
     /// Pushes all suffix tokens to the output, adding corresponding MWEs and clearing the suffix list.
-    pub fn push_suffix(&mut self) {
+    pub fn push_suffix(&mut self, vocab: &VocabDatabase) {
         for token in self.suffix.iter() {
+            self.context.push(&token, &vocab);
             self.output.tokens.push(token.clone());
 
             self.output.mwe.push(MWE {

@@ -1,0 +1,41 @@
+   Compiling verax v0.1.0 (/home/boxer/devel/cicero/cicero/share/verax/lib)
+error: expected one of `)`, `,`, `.`, or `?`, found `sophia`
+  --> src/sophia.rs:40:48
+   |
+40 |         return (sophia as *mut () as *const () sophia, 0 as i32);
+   |                                               -^^^^^^ expected one of `)`, `,`, `.`, or `?`
+   |                                               |
+   |                                               help: missing `,`
+
+error[E0308]: mismatched types
+  --> src/sophia.rs:40:17
+   |
+40 |         return (sophia as *mut () as *const () sophia, 0 as i32);
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ types differ in mutability
+   |
+   = note: expected raw pointer `*mut *const ()`
+              found raw pointer `*const ()`
+
+error[E0308]: mismatched types
+  --> src/sophia.rs:40:48
+   |
+40 |         return (sophia as *mut () as *const () sophia, 0 as i32);
+   |                                                ^^^^^^ expected `i32`, found `*const dyn SophiaInterface`
+   |
+   = note:     expected type `i32`
+           found raw pointer `*const dyn SophiaInterface`
+
+error[E0308]: mismatched types
+  --> src/sophia.rs:40:16
+   |
+18 | pub extern "C" fn load_sophia(datadir: *const *const c_char, language: *const *const c_char) -> (*mut *const (), i32) {
+   |                                                                                                 --------------------- expected `(*mut *const (), i32)` because of return type
+...
+40 |         return (sophia as *mut () as *const () sophia, 0 as i32);
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected a tuple with 2 elements, found one with 3 elements
+   |
+   = note: expected tuple `(*mut *const (), i32)`
+              found tuple `(*mut *const (), i32, i32)`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `verax` (lib) due to 4 previous errors

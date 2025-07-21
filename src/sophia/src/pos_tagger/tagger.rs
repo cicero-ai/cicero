@@ -27,7 +27,7 @@ struct Buffer {
 
 /// Represents a resolved score for a word, including its position, assigned tag, maximum score, and score distribution for possible tags.
 #[derive(Default)]
-struct ResolvedScore {
+pub struct ResolvedScore {
     pub is_exact: bool,
     pub position: usize,
     pub tag: POSTag,
@@ -45,7 +45,7 @@ impl POSTagger<f8, i32> {
         for x in 0..output.tokens.len() {
             // Correct spelling typo
             if output.tokens[x].pos == POSTag::FW {
-                self.fix_typo(x, output, &vocab);
+                self.fix_typo(x, output, vocab);
             }
 
             // Resolve ambiguous word
@@ -138,7 +138,7 @@ impl POSTaggerLayer<f8> {
         }
 
         // Initialize variables
-        let (mut max_tag, mut max_score) = (buffer[position].clone(), 0.0);
+        let (mut max_tag, mut max_score) = (buffer[position], 0.0);
         let mut scores: HashMap<POSTag, f32> = HashMap::new();
 
         // Initial
@@ -364,13 +364,13 @@ impl fmt::Debug for ResolvedScore {
             .iter()
             .map(|(tag, score)| format!("({} {})", tag.to_str(), score))
             .collect::<Vec<String>>();
-        write!(
+        writeln!(
             f,
-            "Resolved Score:  pos {} tag {} score {}\n",
+            "Resolved Score:  pos {} tag {} score {}",
             self.position,
             self.tag.to_str(),
             self.max_score
         )?;
-        write!(f, "    scores: {}", scores_vec.join(" ").to_string())
+        write!(f, "    scores: {}", scores_vec.join(" "))
     }
 }

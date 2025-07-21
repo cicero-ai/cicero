@@ -26,7 +26,7 @@ pub enum MWEType {
 }
 
 /// Defines the capitalization style of a word, which can be lowercase, uppercase, title case, or other.
-#[derive(Default, Serialize, Deserialize, Eq, PartialEq, Clone)]
+#[derive(Default, Serialize, Deserialize, Eq, PartialEq, Hash, Clone)]
 pub enum Capitalization {
     #[default]
     lower,

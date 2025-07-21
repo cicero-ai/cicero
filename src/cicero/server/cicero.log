@@ -1,0 +1,2 @@
+[17:52:59] INFO: Successfully loaded configuration file /home/boxer/.config/cicero/server/config.json (cicero/server/src/apollo/config.rs:71)
+[17:52:39] ERROR: You did not specify a command to run.  Please specify a command or use 'help' or '-h' to view a list of all available commands. (deps/falcon-cli/src/router.rs:72)

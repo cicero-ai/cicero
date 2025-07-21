@@ -291,6 +291,10 @@ impl POSTag {
         self.to_str().starts_with("V")
     }
 
+    pub fn is_punctuation(&self) -> bool {
+        *self == Self::SS || *self == Self::PUNC
+    }
+
     /// Check whether the POS tag belongs to a adjective
     pub fn is_adjective(&self) -> bool {
         self.to_str().starts_with("J")

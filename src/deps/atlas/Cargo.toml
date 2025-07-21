@@ -1,0 +1,23 @@
+[package]
+name = "atlas-web"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name="atlas_web"
+
+[dependencies]
+atlas-http = { path = "../http" }
+chrono = { version = "0.4.37", features = ["serde"] }
+log = "0.4.21"
+parsex = { path = "../parsex" }
+phonenumber = "0.3.4"
+regex = "1.10.4"
+serde = "1.0.196"
+serde_derive = "1.0.196"
+serde_json = "1.0.113"
+serde_yaml = "0.9.31"
+url = "2.5.0"
+urlencoding = "2.1.3"
+
+
