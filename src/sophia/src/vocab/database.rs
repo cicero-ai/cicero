@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use super::{
@@ -9,7 +10,6 @@ use super::{
 use crate::error::Error;
 use crate::pos_tagger::{POSTag, POSTagger};
 use crate::tokenizer::Token;
-use crate::vocab::f8::f8;
 use crate::vocab::mwe::Capitalization;
 use bincode;
 use indexmap::IndexMap;
@@ -58,7 +58,7 @@ pub struct VocabPreProcessDatabase {
 #[derive(Serialize, Deserialize)]
 pub struct VocabWordDatabase {
     pub wordlist: HashMap<String, IndexMap<POSTag, i32>>,
-    pub pos_tagger: POSTagger<f8, i32>,
+    pub pos_tagger: POSTagger,
     pub mwe: VocabMWE,
     pub capitalization: HashMap<i32, Capitalization>,
     pub future_verbs: FutureVerbPhrases,
@@ -130,8 +130,8 @@ impl VocabDatabase {
         }
 
         // Straight lookup
-        if let Some(index) = self.words.wordlist.get(&word.to_string()) {
-            return Some((word.to_string(), index.clone()));
+        if let Some(pos_map) = self.words.wordlist.get(&word.to_lowercase().to_string()) {
+            return Some((word.to_string(), pos_map.clone()));
         }
 
         // Lowercase lookup
@@ -143,8 +143,8 @@ impl VocabDatabase {
     }
 
     /// Creates a Token from a given token ID using the vocabulary database.
-    pub fn from_int(&self, token_id: &i32) -> Token {
-        Token::from_id(*token_id, self)
+    pub fn from_int(&self, token_id: i32) -> Token {
+        Token::from_id(token_id, self)
     }
 }
 

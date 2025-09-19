@@ -1,567 +1,601 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use std::fmt;
+use std::hash::Hash;
 use serde::{Serialize, Deserialize};
-use std::hash::{Hash, Hasher};
-use crate::pos_tagger::POSTag;
-use crate::pos_tagger::tagger::ResolvedScore;
-use crate::vocab::{VocabDatabase, VocabMWE, Capitalization};
+use std::collections::HashMap;
+use super::{POSTag, TokenKey};
 use crate::tokenizer::Token;
+use crate::vocab::{PronounCategory, PronounPerson, PronounNumber};
+use crate::Error;
 
-pub const MAX_TAGS_BEFORE: usize = 6;
-pub const MAX_TAGS_AFTER: usize = 4;
-pub const MAX_ANCHORS_BEFORE: usize = 4;
-pub const MAX_ANCHORS_AFTER: usize = 2;
+pub const SIBLING_TAGS_BEFORE: usize = 8;
+pub const SIBLING_TAGS_AFTER: usize = 4;
 
-#[derive(Default)]
-pub struct POSTaggerContext {
-    tags: Vec<POSTag>,
-    anchors: Vec<Anchor>,
-    stoppers: Vec<usize>,
-    pub words: Vec<ResolvedScore>,
-    current_anchor: Anchor
+pub static MODAL_VERBS: &[&str] = &["can", "could", "may", "might", "must", "shall", "should", "will", "would"];
+pub static PASSIVE_INDICATORS: &[&str] = &["am", "are", "be", "been", "being", "is", "was", "were", "get", "gets", "getting", "got", "gotten"];
+pub static AUXILLARY_VERBS: &[&str] = &["am", "are", "be", "been", "being", "can", "could", "did", "do", "does", "doing", "had", "has", "have", "having", "is", "may", "might", "must", "shall", "should", "was", "were", "will", "would"];
+pub static PERFECT_TENSE_INDICATORS: &[&str] = &["have", "has", "had", "having"];
+pub static TEMPORAL_ADVERBS: &[&str] = &["now", "then", "today", "yesterday", "tomorrow", "always", "often", "sometimes", "never", "rarely", "usually", "frequently", "seldom", "ever", "already", "yet", "still", "just", "soon", "recently", "lately", "before", "after", "first", "next", "last", "finally", "forever", "briefly"];
+pub static COMMON_ADVERBS: &[&str] = &[
+    "quickly", "slowly", "carefully", "easily", "quietly", "loudly", "clearly", "closely", "simply", "suddenly",
+    "always", "often", "usually", "sometimes", "rarely", "never", "frequently", "occasionally",
+    "very", "too", "quite", "almost", "nearly", "hardly", "barely", "enough",
+    "now", "then", "today", "yesterday", "tomorrow", "soon", "later", "already", "still", "yet",
+    "even", "only", "just", "also", "however", "therefore", "thus", "otherwise", "rather", "indeed"
+];
+
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(bound = "S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>")]
+pub struct POSContext<S>(pub Vec<Vec<POSFeatureToken<S>>>);
+
+pub struct POSContextIter<'a, S> {
+    context: &'a POSContext<S>,
+    indices: Vec<usize>,
+    outer_index: usize,
+    inner_index: usize,
 }
 
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct Anchor {
-    pub position: usize,
-    pub tag: POSTag,
-    pub general_tag: POSTag,
-    pub span: Vec<(SpanContent, Distance)>
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(bound = "S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>")]
+pub struct POSConjunction<S> {
+    pub tags: HashMap<POSTag, f32>,
+    pub weight: f32,
+    pub mi_score: f32,
+    pub siblings: Vec<POSFeature<S>>
 }
 
-#[derive(Default, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub struct AnchorIncludes {
-    pub length: usize,
-    pub is_exact_tag: bool,
-    pub inc_distance: bool,
-    pub inc_span: bool,
-    pub inc_span_distance: bool
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[serde(bound = "S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>")]
+pub struct POSFeature<S> {
+    pub feature_token: POSFeatureToken<S>,
+    pub offset: i8,
+    pub noise_profile: u8
 }
 
-#[derive(Default, Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub enum SpanContent {
-    RB(String),
-    JJ(String),
-    DT,
-    IN,
-    IN_DT,
-    MD,
-    verb,   // non VB, VBG
-    CC,
-    CS,
-    CA,
-    PR,
-    PRP,
-    #[default]
-    empty,
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
+#[serde(bound = "S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>")]
+pub enum POSFeatureToken<S> {
+    tag(POSTag),
+    tag_group(POSTagGroup),
+    word_group(POSWordGroup),
+    word(S),
+    suffix(POSSuffix),
+    pronoun_category(PronounCategory),
+    pronoun_person(PronounPerson),
+    pronoun_number(PronounNumber)
 }
 
-#[derive(Default, Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub enum Distance {
-    #[default]
-    none,
-    adjacent,
-    short,
-    medium,
-    long,
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
+pub enum POSTagGroup {
+    noun,
+    verb,
+    base_verb,
+    current_verb,
+    past_verb,
+    adverb,
+    adjective,
+    pronoun
 }
 
-#[derive(Default, Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
-enum SentencePosition {
-    #[default]
-    first_word,
-    last_word,
-    beginning,
-    middle,
-    end,
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
+pub enum POSWordGroup {
+    modal_verb,
+    passive_indicator,
+    auxillary_verb,
+    perfect_tense_indicator,
+    temporal_adverb,
+    common_adverb
 }
 
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct Feature {
-    pub position: usize,
-    pub feature_type: FeatureType,
-    capitalization: Capitalization,
-    sentence_position: SentencePosition,
-    pub tags_before: Vec<POSTag>,
-    pub tags_after: Vec<POSTag>,
-    pub anchors_before: Vec<Anchor>,
-    pub anchors_after: Vec<Anchor>
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
+pub enum POSSuffix {
+    ed,
+    ing,
+    ly,
+    day,
+    s,
+    en,
+    er,
+    est,
+    t,
+    tion,
+    ion,
+    al,
+    ous,
+    ful,
+    less,
+    able,
+    ible,
+    ive,
+    ness,
+    ment,
+    ity,
+    ty,
+    ance,
+    ence,
+    age,
+    ship,
+    hood,
+    ward,
+    wise
 }
 
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct DeterministicRule {
-    pub tag: POSTag,
-    pub feature: Feature,
-    pub exceptions: Vec<(Feature, Option<POSTag>)>,
-    pub siblings: Vec<Feature>
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
+pub enum POSPrefix {
+    un,
+    re,
+    r#in,
+    dis,
+    en,
+    em,
+    non,
+    pre,
+    pro,
+    anti,
+    de,
+    mis,
+    over,
+    under,
+    counter,
+    mal,
+    sub,
+    semi,
+    multi,
+    mini,
+    micro,
+    mega,
+    inter,
+    intra,
+    trans,
+    extra,
+    intro,
+    retro,
+    circum,
+    post,
+    fore,
+    ante,
+    uni,
+    bi,
+    tri,
+    quad,
+    poly,
+    mono,
+    pseudo,
+    quasi,
+    auto,
+    co,
+    com,
+    con,
+    ex
 }
 
-#[derive(Default, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub enum FeatureType {
-    #[default]
-    none,
-    tag_before(usize),
-    tag_after(usize),
-    anchor_before(AnchorIncludes),
-    anchor_after(AnchorIncludes),
-    sentence_position,
-    capitalization
+impl<S> Default for POSContext<S>
+where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+ {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
-impl POSTaggerContext {
+impl<S> POSContext<S> 
+    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+{
 
-    pub fn push(&mut self, token: &Token, vocab: &VocabDatabase) {
+        pub fn new() -> Self {
+        Self(vec![vec![]; SIBLING_TAGS_BEFORE + SIBLING_TAGS_AFTER + 1])
+    }
 
-        let position = self.tags.len();
-        self.tags.push(token.pos);
-        if token.pos == POSTag::SS {
-            self.stoppers.push(position);
+    /// Build context of ambiguous token from position within a vector of tokens
+    pub fn from_tokens(position: usize, tokens: &[Token]) -> Self {
+        let mut context = Self::new();
+
+        // Before siblings
+        for offset in 1..=SIBLING_TAGS_BEFORE {
+            if position < offset || tokens[position - offset].pos == POSTag::SS {
+                break;
+            }
+
+            context.0[SIBLING_TAGS_BEFORE - offset] = POSFeatureToken::build_from_token(&tokens[position-offset]);
         }
 
-        // Check for continuation of current anchor (eg. compound noun)
-        if self.is_continuation(token).is_some() {
-            return;
+        // After siblings
+        for offset in 1..=SIBLING_TAGS_AFTER {
+            if (position + offset) >= tokens.len() || tokens[position + offset].pos == POSTag::SS {
+                break;
+            }
+
+            context.0[SIBLING_TAGS_BEFORE + offset] = POSFeatureToken::build_from_token(&tokens[position + offset]);
         }
 
-        // Check if new anchor found
-        if self.is_new_anchor(position, token).is_some() {
-            return;
-        }
+        context
+    }
 
-        // Get last span
-        let last_span = match self.current_anchor.span.last() {
-            Some(res) => res.0.clone(),
-            None => SpanContent::empty
+    pub fn iter_ft(&self) -> POSContextIter<'_, S> {
+
+        // Get indices
+        let start = SIBLING_TAGS_BEFORE + 1;
+        let mut indices: Vec<usize> = (0..SIBLING_TAGS_BEFORE).rev().collect();
+        indices.extend(&(start..(start + SIBLING_TAGS_AFTER)).collect::<Vec<usize>>());
+
+        POSContextIter {
+            context: self,
+            indices,
+            outer_index: 0,
+            inner_index: 0
+        }
+    }
+
+}
+
+impl<S> POSFeature<S> 
+    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+{
+    pub fn new(feature_token: POSFeatureToken<S>, offset: i8, noise_profile: u8) -> POSFeature<S> {
+        Self {
+            feature_token,
+            offset,
+            noise_profile
+        }
+    }
+
+    pub fn get_score(&self) -> f32 {
+        let base_weight = self.feature_token.get_base_weight();
+
+        // Get distance weight
+        let distance_base = if self.offset < 0 {
+            SIBLING_TAGS_BEFORE as i8 - self.offset.abs() 
+        } else {
+            SIBLING_TAGS_AFTER as i8 - self.offset
         };
 
-        // Determine span content
-        let span = match token {
-            tk if tk.is_adverb() => SpanContent::RB(self.get_token_category(token, vocab)), // Note: Duplicate condition, should fix
-            tk if tk.is_adjective() => SpanContent::JJ(self.get_token_category(token, vocab)),
-            tk if tk.pos == POSTag::DT && last_span == SpanContent::IN => {
-                self.current_anchor.span.last_mut().unwrap().0 = SpanContent::IN_DT;
-                SpanContent::empty
-            }
-            tk if tk.pos == POSTag::DT => SpanContent::DT,
-            tk if tk.pos == POSTag::IN => SpanContent::IN,
-            tk if tk.pos == POSTag::MD => SpanContent::MD,
-            tk if tk.is_verb() && tk.pos != POSTag::VB && tk.pos != POSTag::VBG => SpanContent::verb,
-            tk if tk.pos == POSTag::CC => SpanContent::CC,
-            tk if tk.pos == POSTag::CS => SpanContent::CS,
-            tk if tk.pos == POSTag::CA => SpanContent::CA,
-            tk if tk.pos == POSTag::PR => SpanContent::PR,
-            tk if tk.pos == POSTag::PRP => SpanContent::PRP,
-            _ => SpanContent::empty,
+        let distance_weight = if self.offset < 0 {
+            ((distance_base * 15) as f32 / 100.0) + 1.0
+        } else {
+            ((distance_base * 25) as f32 / 100.0) + 1.0
         };
 
-        // Add to span
-        if span != SpanContent::empty {
-            let distance = position - self.current_anchor.position;
-            self.current_anchor.span.push((span, Distance::from(distance)));
-        }
+        base_weight * distance_weight
     }
 
-    /// Check whether or not this is a continuation of the current anchor (eg. compound noun, multi-punctuation, etc.)
-    fn is_continuation(&self, token: &Token) -> Option<()> {
-
-        if (token.pos.is_noun() && self.current_anchor.tag.is_noun()) 
-            || ([POSTag::VB, POSTag::VBG].contains(&token.pos) && self.current_anchor.tag.is_verb()) 
-            || (token.pos.is_punctuation() && self.current_anchor.tag.is_punctuation()) {
-            return Some(());
+    pub fn get_index(&self) -> usize {
+        if self.offset < 0 {
+            SIBLING_TAGS_BEFORE - self.offset.unsigned_abs() as usize
+        } else {
+            SIBLING_TAGS_BEFORE + self.offset as usize
         }
-
-        None
     }
+}
 
-    /// Check if this is a new anchor
-    fn is_new_anchor(&mut self, position: usize, token: &Token) -> Option<()> {
+impl<S> POSFeatureToken<S> 
+    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+{
+    // Build all possible feature tokens from a Token struct
+    pub fn build_from_token(token: &Token) -> Vec<Self> {
+        let mut res = vec![
+            Self::tag(token.pos), 
+            Self::word(token.get_key())
+        ];
 
-        if (token.is_noun() && !self.current_anchor.tag.is_noun()) 
-            || ((token.pos == POSTag::VB || token.pos == POSTag::VBG) && !self.current_anchor.tag.is_verb()) 
-            || ((token.pos == POSTag::SS || token.pos == POSTag::PUNC) && !self.current_anchor.tag.is_punctuation()) 
-        {
-
-            // Add current to anchors, if necessary
-            if self.current_anchor.tag != POSTag::FW {
-                self.anchors.push(self.current_anchor.clone());
-                self.current_anchor = Anchor::new(position, token);
-            }
-            return Some(());
+        // Standard tag group
+        if let Ok(tag_group) = POSTagGroup::try_from(token) {
+            res.push(Self::tag_group(tag_group));
         }
 
-        None
-    }
-
-    /// Get category name of a token
-    fn get_token_category(&self, token: &Token, vocab: &VocabDatabase) -> String {
-
-        for category_id in token.categories.iter() {
-            let cat = vocab.categories.get(category_id).unwrap();
-            let fqn = vocab.categories.get_fqn(&cat);
-            if token.pos.is_adverb() && fqn[0] == "adverbs" {
-                return fqn[1].to_string();
-            } else if token.pos.is_adjective() && fqn[0] == "adjectives" {
-                return fqn[1].to_string();
-            }
+        // Granular verb based tag groups
+        if token.pos == POSTag::VB {
+            res.push(Self::tag_group(POSTagGroup::base_verb));
+        } else if [POSTag::VBG, POSTag::VBZ].contains(&token.pos) {
+            res.push(Self::tag_group(POSTagGroup::current_verb));
+        } else if [POSTag::VBN, POSTag::VBD, POSTag::VBP].contains(&token.pos) {
+            res.push(Self::tag_group(POSTagGroup::past_verb));
         }
 
-        "uncategorized".to_string()
-    }
-
-    /// Extract feature from the context for a specific word / position
-    pub fn extract_feature(&self, mut position: usize, token: &Token) -> Feature {
-        let mut res = Feature {
-            position,
-            capitalization: VocabMWE::classify_capitalization(&token.word),
-            sentence_position: self.get_sentence_position(position),
-            ..Default::default()
-        };
-
-        // Get anchor index
-        let mut anchor_index = self.anchors.iter().position(|an| an.position > position).unwrap_or(0);
-
-        // Before tags
-        if position > 0 {
-            let start = position.saturating_sub(MAX_TAGS_BEFORE);
-            res.tags_before = self.tags[start..position].iter().rev().map(|tag| *tag).collect();
+        // Try the word groups
+        if MODAL_VERBS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::modal_verb));
+        }
+        if PASSIVE_INDICATORS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::passive_indicator));
+        }
+        if AUXILLARY_VERBS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::auxillary_verb));
+        }
+        if PERFECT_TENSE_INDICATORS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::perfect_tense_indicator));
+        }
+        if TEMPORAL_ADVERBS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::temporal_adverb));
+        }
+        if COMMON_ADVERBS.contains(&token.word.to_lowercase().as_str()) {
+            res.push(Self::word_group(POSWordGroup::common_adverb));
         }
 
-        // Before anchors
-        if anchor_index > 0 {
-            let start = anchor_index.saturating_sub(MAX_ANCHORS_BEFORE);
-            res.anchors_before = self.anchors[start..anchor_index].iter().rev().map(|anc| anc.clone()).collect();
+        if let Ok(suffix) = POSSuffix::try_from(token) {
+            res.push(Self::suffix(suffix));
         }
 
-
-        // After tags
-        position += 1;
-        if position < self.tags.len() { 
-            let end = (position + MAX_TAGS_AFTER).min(self.tags.len());
-            res.tags_after = self.tags[position..end].to_vec();
-        }
-
-        // After anchors
-        anchor_index += 1;
-        if anchor_index < self.anchors.len() {
-            let end = (anchor_index + MAX_ANCHORS_AFTER).min(self.anchors.len());
-            res.anchors_after = self.anchors[anchor_index..end].to_vec();
+        if let Some(pronoun) = &token.pronoun {
+            res.push(Self::pronoun_category(pronoun.category.clone()));
+            res.push(Self::pronoun_person(pronoun.person.clone()));
+            res.push(Self::pronoun_number(pronoun.number.clone()));
         }
 
         res
     }
 
-    /// Get sentence position
-
-    fn get_sentence_position(&self, position: usize) -> SentencePosition {
-        // Find the sentence boundaries for the given position
-        let (sentence_start, sentence_end) = self.find_sentence_boundaries(position);
-        
-        // Calculate sentence length and relative position within sentence
-        let sentence_length = sentence_end - sentence_start + 1;
-        let relative_position = position - sentence_start;
-        
-        // Determine the position type
-        match relative_position {
-            0 => SentencePosition::first_word,
-            pos if pos == sentence_length - 1 => SentencePosition::last_word,
-            pos => {
-                let quarter_length = sentence_length as f32 * 0.25;
-                if (pos as f32) < quarter_length {
-                    SentencePosition::beginning
-                } else if (pos as f32) >= (sentence_length as f32 - quarter_length) {
-                    SentencePosition::end
-                } else {
-                    SentencePosition::middle
-                }
-            }
-        }
+    /// Whether or not the feature can be used as a primary / anchor feature
+    pub fn is_primary(&self) -> bool {
+        matches!(self, Self::tag(_) | Self::tag_group(_) | Self::word_group(_) | Self::word(_))
     }
 
-    // Helper function to find sentence boundaries
-    fn find_sentence_boundaries(&self, position: usize) -> (usize, usize) {
-        // Find the start of the sentence
-        let sentence_start = self.stoppers
-            .iter()
-            .rev()
-            .find(|&&stopper_pos| stopper_pos < position)
-            .map(|&stopper_pos| stopper_pos + 1)
-            .unwrap_or(0);
-        
-        // Find the end of the sentence
-        let sentence_end = self.stoppers
-            .iter()
-            .find(|&&stopper_pos| stopper_pos >= position)
-            .copied()
-            .unwrap_or(position); // If no stopper found after position, use position itself
-        
-        (sentence_start, sentence_end)
-    }
-}
-
-impl Anchor {
-    pub fn new(position: usize, token: &Token) -> Self {
-
-            // Get general pos
-        let general_tag = match token.pos {
-            t if t.is_noun() => POSTag::NN,
-            t if t.is_verb() => POSTag::VB,
-            t if t.is_punctuation() => POSTag::PUNC,
-            _ => POSTag::FW
-        };
-
-        Self {
-            position,
-            tag: token.pos,
-            general_tag,
-            ..Default::default()
-        }
+    // Convert token into a feature
+    pub fn to_feature(&self, offset: usize, noise_profile: u8) -> POSFeature<S> {
+        let f_offset = if offset >= SIBLING_TAGS_BEFORE { (offset - SIBLING_TAGS_BEFORE) as i8 } else { 0_i8 - offset as i8 };
+        POSFeature::new(self.clone(), f_offset, noise_profile)
     }
 
-    pub fn to_debug(&self, specs: &AnchorIncludes) -> String {
-
-        let mut res = if specs.is_exact_tag {
-            format!("exact tag {}", self.tag)
-        } else {
-            format!("general tag {}", self.general_tag)
-        };
-
-        if specs.inc_distance {
-            res = format!("{} d", res);
-        }
-        if !specs.inc_span { return res; }
-
-        let span_res = self.span.iter().map(|(span, dist)| {
-            if specs.inc_span_distance { 
-                format!("{:?} d{:?}", span, dist) 
-            } else { 
-                format!("{:?}", span) 
-            }
-        }).collect::<Vec<String>>().join(" ").to_string();
-
-        format!("{} span {}", res, span_res)
-    }
-}
-
-impl From<usize> for Distance {
-    fn from(value: usize) -> Self {
-        match value {
-            val if val <= 1 => Self::adjacent,
-            val if val <= 3 => Self::short,
-            val if val <= 6 => Self::medium,
-            _ => Self::long
-        }
-    }
-}
-
-impl AnchorIncludes {
-    pub fn new(length: usize, is_exact_tag: bool, inc_distance: bool, inc_span: bool, inc_span_distance: bool) -> Self {
-        Self { length, is_exact_tag, inc_distance, inc_span, inc_span_distance }
-    }
-
-    pub fn all(length: usize, direction: &str) -> Vec<FeatureType> {
-        let mut res = vec![];
-        let x = length;
-
-        res.push(Self::new(x, false, false, false, false));
-        res.push(Self::new(x, false, true, false, false));
-        res.push(Self::new(x, false, true, true, false));
-        res.push(Self::new(x, false, true, true, true));
-
-        res.push(Self::new(x, true, false, false, false));
-        res.push(Self::new(x, true, true, false, false));
-        res.push(Self::new(x, true, true, true, false));
-        res.push(Self::new(x, true, true, true, true));
-
-        // Return
-        res.iter().map(|specs| {
-            if direction == "after" { FeatureType::anchor_after(*specs) } else { FeatureType::anchor_before(*specs) }
-        }).collect::<Vec<FeatureType>>()
-    }
-}
-
-impl Hash for Feature {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.feature_type.hash(state);
-
-        let mut specs = AnchorIncludes::default();
-        let mut anchor_vec = &self.anchors_before;
-
-        match &self.feature_type {
-            FeatureType::tag_before(num) => {
-                let end = (*num as usize).min(self.tags_before.len());
-                self.tags_before[0..end].to_vec().hash(state);
-            },
-            FeatureType::tag_after(num) => {
-                let end = (*num as usize).min(self.tags_after.len());
-                self.tags_after[0..end].to_vec().hash(state);
-            },
-            FeatureType::anchor_before(includes) => specs = includes.clone(),
-            FeatureType::anchor_after(includes) => {
-                specs = includes.clone();
-                anchor_vec = &self.anchors_after;
-            },
-            FeatureType::sentence_position => self.sentence_position.hash(state),
-            FeatureType::capitalization => self.capitalization.hash(state),
-            _ => unreachable!()
-        };
-        if specs.length == 0 { return; }
-
-        // Hash anchors
-        for (x, anchor) in anchor_vec.iter().enumerate() {
-            if x >= specs.length { break; }
-
-            if specs.is_exact_tag {
-                anchor.tag.hash(state);
-            } else {
-                anchor.general_tag.hash(state);
-            }
-
-            if specs.inc_distance {
-                let distance: usize = if anchor.position > self.position { anchor.position - self.position } else { self.position - anchor.position };
-                Distance::from(distance).hash(state);
-            }
-            if !specs.inc_span { continue; }
-
-            for (span, dist) in anchor.span.iter() {
-                span.hash(state);
-                if specs.inc_span_distance {
-                    dist.hash(state);
-                }
-            }
-        }
-    }
-}
-
-impl PartialEq for Feature {
-    fn eq(&self, other: &Self) -> bool {
-        // First, check if feature_type matches
-        if self.feature_type != other.feature_type {
-            return false;
-        }
-
-        // Compare fields based on feature_type, mirroring the Hash implementation
-        match &self.feature_type {
-            FeatureType::tag_before(num) => {
-                let end = (*num as usize).min(self.tags_before.len()).min(other.tags_before.len());
-                self.tags_before[0..end] == other.tags_before[0..end]
-            }
-            FeatureType::tag_after(num) => {
-                let end = (*num as usize).min(self.tags_after.len()).min(other.tags_after.len());
-                self.tags_after[0..end] == other.tags_after[0..end]
-            }
-            FeatureType::anchor_before(includes) => {
-                self.compare_anchors(&self.anchors_before, &other.anchors_before, self.position, includes)
-            }
-            FeatureType::anchor_after(includes) => {
-                self.compare_anchors(&self.anchors_after, &other.anchors_after, self.position, includes)
-            }
-            FeatureType::sentence_position => self.sentence_position == other.sentence_position,
-            FeatureType::capitalization => self.capitalization == other.capitalization,
-            _ => unreachable!()
-        }
-    }
-}
-
-impl Feature {
-    pub fn with_type(mut self, ftype: FeatureType) -> Self {
-        self.feature_type = ftype;
-        self
-    }
-
-    fn compare_anchors(&self, anchors1: &[Anchor], anchors2: &[Anchor], position: usize, specs: &AnchorIncludes) -> bool {
-        // Compare up to specs.length anchors
-        let len = specs.length.min(anchors1.len()).min(anchors2.len());
-        for i in 0..len {
-            let anchor1 = &anchors1[i];
-            let anchor2 = &anchors2[i];
-
-            // Compare tag
-            if specs.is_exact_tag && anchor1.tag != anchor2.tag {
-                return false;
-            } else if (!specs.is_exact_tag) && anchor1.general_tag != anchor2.general_tag {
-                return false;
-            }
-
-            // Compare distance if inc_distance is true
-            if specs.inc_distance {
-                let distance1: usize = if anchor1.position > position { anchor1.position - position } else { position - anchor1.position };
-                let distance2: usize = if anchor2.position > position { anchor2.position - position } else { position - anchor2.position };
-                if Distance::from(distance1) != Distance::from(distance2) {
-                    return false;
-                }
-            }
-
-            // Compare span if inc_span is true
-            if specs.inc_span {
-                if anchor1.span.len() != anchor2.span.len() {
-                    return false;
-                }
-                for ((span1, dist1), (span2, dist2)) in anchor1.span.iter().zip(anchor2.span.iter()) {
-                    if span1 != span2 {
-                        return false;
-                    }
-                    // Compare span distance if inc_span_distance is true
-                    if specs.inc_span_distance && dist1 != dist2 {
-                        return false;
-                    }
-                }
-            }
-        }
-        true
-    }
-}
-
-impl Eq for Feature {}
-
-impl fmt::Debug for Feature {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-
-        if let FeatureType::tag_before(num) = self.feature_type {
-            let tags = self.tags_before.iter().map(|tag| tag.to_string()).collect::<Vec<String>>().join(" ").to_string();
-            write!(f, "{} tags before -- {}", num, tags)
-        } else if let FeatureType::tag_after(num) = self.feature_type {
-            let tags = self.tags_after.iter().map(|tag| tag.to_string()).collect::<Vec<String>>().join(" ").to_string();
-            write!(f, "{} tags after -- {}", num, tags)
-        } else if let FeatureType::anchor_before(specs) = self.feature_type {
-            let mut res = Vec::new();
-            for (x, a) in self.anchors_before.iter().enumerate() {
-                if x >= specs.length { break; }
-                res.push(a.to_debug(&specs));
-            }
-            write!(f, "{} anchors before: {}", specs.length, res.join(" | ").to_string())
-        } else if let FeatureType::anchor_after(specs) = self.feature_type {
-            let mut res = Vec::new();
-            for (x, a) in self.anchors_after.iter().enumerate() {
-                if x >= specs.length { break; }
-                res.push(a.to_debug(&specs));
-            }
-            write!(f, "{} anchors after: {}", specs.length, res.join(" | ").to_string())
-
-        } else if FeatureType::sentence_position == self.feature_type {
-            write!(f, "sentence pos: {:?}", self.sentence_position)
-
-        } else {
-            write!(f, "Unknown")
-        }
-
-    }
-}
-
-impl FeatureType {
-    pub fn to_u8(&self) -> u8 {
+    /// Check if token contains this feature
+    pub fn contains_token(&self, token: &Token) -> bool {
         match self {
-            Self::none => 0,
-            Self::sentence_position => 1,
-            Self::capitalization => 2,
-            Self::tag_before(_num) => 3,
-            Self::tag_after(_num) => 4,
-            Self::anchor_before(_specs) => 5,
-            Self::anchor_after(_specs) => 6
+            Self::tag(tag) => token.pos == *tag,
+            Self::tag_group(tag_group) => tag_group.is_group(token),
+            Self::word_group(word_group) => word_group.is_group(token),
+            Self::word(word) => token.get_key() == *word,
+            Self::suffix(suffix) => suffix.token_has(token),
+            Self::pronoun_category(category) => token.pronoun.as_ref().unwrap().category == *category,
+            Self::pronoun_person(person) => token.pronoun.as_ref().unwrap().person == *person,
+            Self::pronoun_number(number) => token.pronoun.as_ref().unwrap().number == *number
         }
+    }
+
+    /// Get base weight of feature token
+    pub fn get_base_weight(&self) -> f32 {
+        match &self {
+            POSFeatureToken::word(_) => 1.8,
+            POSFeatureToken::tag(_) => 1.6,
+            POSFeatureToken::word_group(_) => 1.4,
+            POSFeatureToken::tag_group(_) => 1.2,
+            _ => 1.0
+        }
+    }
+}
+
+impl POSTagGroup {
+    /// Check whether or not token exists to group
+    pub fn is_group(&self, token: &Token) -> bool {
+        (*self == Self::noun && token.is_noun()) ||
+            (*self == Self::pronoun && token.is_pronoun()) || 
+            (*self == Self::verb && token.is_verb()) || 
+            (*self == Self::base_verb && token.pos == POSTag::VB) || 
+            (*self == Self::current_verb && [POSTag::VBG, POSTag::VBZ].contains(&token.pos)) || 
+            (*self == Self::past_verb && [POSTag::VBD, POSTag::VBP, POSTag::VBN].contains(&token.pos)) || 
+            (*self == Self::adverb && token.is_adverb()) || (*self == Self::adjective && token.is_adjective())
+    }
+}
+
+impl POSWordGroup {
+    /// Check whether or not token exists to group
+    pub fn is_group(&self, token: &Token) -> bool {
+        let lowered = token.word.to_lowercase();
+        let word = lowered.as_str();
+
+        (*self == Self::modal_verb && MODAL_VERBS.contains(&word)) || 
+            (*self == Self::auxillary_verb && AUXILLARY_VERBS.contains(&word)) || 
+            (*self == Self::passive_indicator && PASSIVE_INDICATORS.contains(&word)) || 
+            (*self == Self::perfect_tense_indicator && PERFECT_TENSE_INDICATORS.contains(&word)) || 
+            (*self == Self::temporal_adverb && TEMPORAL_ADVERBS.contains(&word)) || (*self == Self::common_adverb && COMMON_ADVERBS.contains(&word))
+    }
+}
+
+impl POSSuffix {
+    /// Check whether or not token has the suffix
+    pub fn token_has(&self, token: &Token) -> bool {
+        let word = token.word.to_lowercase();
+        let suffix = format!("{:?}", self).to_lowercase();
+        word.ends_with(&suffix)
+    }
+}
+
+impl TryFrom<&Token> for POSTagGroup {
+    type Error = Error;
+
+    fn try_from(token: &Token) -> Result<Self, Self::Error> {
+        let res = match token {
+            t if t.is_noun() => Self::noun,
+            t if t.is_verb() => Self::verb,
+            t if t.is_adverb() => Self::adverb,
+            t if t.is_adjective() => Self::adjective,
+            t if t.is_pronoun() => Self::pronoun,
+            _ => return Err(Error::Generic("No tag group available.".to_string()))
+        };
+
+        Ok(res)
+    }
+}
+
+impl TryFrom<&Token> for POSWordGroup {
+    type Error = Error;
+
+    fn try_from(token: &Token) -> Result<Self, Self::Error> {
+        let lowered = token.word.to_lowercase();
+        let word = lowered.as_str();
+
+        let res = match token {
+            _ if MODAL_VERBS.contains(&word) => Self::modal_verb,
+            _ if PASSIVE_INDICATORS.contains(&word) => Self::passive_indicator,
+            _ if AUXILLARY_VERBS.contains(&word) => Self::auxillary_verb,
+            _ if PERFECT_TENSE_INDICATORS.contains(&word) => Self::perfect_tense_indicator,
+            _ if TEMPORAL_ADVERBS.contains(&word) => Self::temporal_adverb,
+            _ if COMMON_ADVERBS.contains(&word) => Self::common_adverb,
+            _ => return Err(Error::Generic("No word group available.".to_string()))
+        };
+
+        Ok(res)
+    }
+}
+
+impl TryFrom<&Token> for POSSuffix {
+    type Error = Error;
+
+    fn try_from(token: &Token) -> Result<Self, Self::Error> {
+        let lowered = token.word.to_lowercase();
+        let word = lowered.as_str();
+
+        // Check each suffix in order of length (longer first to avoid partial matches)
+        // For example, "tion" should match before "ion"
+        let suffixes = [
+            (POSSuffix::tion, "tion"),
+            (POSSuffix::able, "able"),
+            (POSSuffix::ible, "ible"),
+            (POSSuffix::ance, "ance"),
+            (POSSuffix::ence, "ence"),
+            (POSSuffix::ment, "ment"),
+            (POSSuffix::ness, "ness"),
+            (POSSuffix::ship, "ship"),
+            (POSSuffix::hood, "hood"),
+            (POSSuffix::ward, "ward"),
+            (POSSuffix::wise, "wise"),
+            (POSSuffix::ing, "ing"),
+            (POSSuffix::est, "est"),
+            (POSSuffix::ous, "ous"),
+            (POSSuffix::day, "day"),
+            (POSSuffix::ful, "ful"),
+            (POSSuffix::less, "less"),
+            (POSSuffix::ive, "ive"),
+            (POSSuffix::ion, "ion"),
+            (POSSuffix::ity, "ity"),
+            (POSSuffix::age, "age"),
+            (POSSuffix::ed, "ed"),
+            (POSSuffix::en, "en"),
+            (POSSuffix::er, "er"),
+            (POSSuffix::ly, "ly"),
+            (POSSuffix::al, "al"),
+            (POSSuffix::ty, "ty"),
+            (POSSuffix::s, "s"),
+            (POSSuffix::t, "t"),
+        ];
+
+        for (suffix_enum, suffix_str) in suffixes.iter() {
+            if word.ends_with(suffix_str) {
+                return Ok(*suffix_enum);
+            }
+        }
+        
+        Err(Error::Generic("No suffix available".to_string()))
+    }
+}
+
+impl POSPrefix {
+    /// Check whether or not token has the prefix
+    pub fn token_has(&self, token: &Token) -> bool {
+        let word = token.word.to_lowercase();
+        let prefix = format!("{:?}", self).to_lowercase();
+        word.starts_with(&prefix)
+    }
+}
+
+impl TryFrom<&Token> for POSPrefix {
+    type Error = Error;
+
+    fn try_from(token: &Token) -> Result<Self, Self::Error> {
+        let lowered = token.word.to_lowercase();
+        let word = lowered.as_str();
+
+        // Check each prefix in order of length (longer first to avoid partial matches)
+        // For example, "counter" should match before "co"
+        let prefixes = [
+            (POSPrefix::counter, "counter"),
+            (POSPrefix::inter, "inter"),
+            (POSPrefix::intra, "intra"),
+            (POSPrefix::trans, "trans"),
+            (POSPrefix::extra, "extra"),
+            (POSPrefix::intro, "intro"),
+            (POSPrefix::retro, "retro"),
+            (POSPrefix::circum, "circum"),
+            (POSPrefix::multi, "multi"),
+            (POSPrefix::micro, "micro"),
+            (POSPrefix::pseudo, "pseudo"),
+            (POSPrefix::quasi, "quasi"),
+            (POSPrefix::under, "under"),
+            (POSPrefix::over, "over"),
+            (POSPrefix::anti, "anti"),
+            (POSPrefix::fore, "fore"),
+            (POSPrefix::ante, "ante"),
+            (POSPrefix::semi, "semi"),
+            (POSPrefix::mini, "mini"),
+            (POSPrefix::mega, "mega"),
+            (POSPrefix::post, "post"),
+            (POSPrefix::auto, "auto"),
+            (POSPrefix::un, "un"),
+            (POSPrefix::re, "re"),
+            (POSPrefix::r#in, "in"),
+            (POSPrefix::dis, "dis"),
+            (POSPrefix::en, "en"),
+            (POSPrefix::em, "em"),
+            (POSPrefix::non, "non"),
+            (POSPrefix::pre, "pre"),
+            (POSPrefix::pro, "pro"),
+            (POSPrefix::de, "de"),
+            (POSPrefix::mis, "mis"),
+            (POSPrefix::mal, "mal"),
+            (POSPrefix::sub, "sub"),
+            (POSPrefix::uni, "uni"),
+            (POSPrefix::bi, "bi"),
+            (POSPrefix::tri, "tri"),
+            (POSPrefix::quad, "quad"),
+            (POSPrefix::poly, "poly"),
+            (POSPrefix::mono, "mono"),
+            (POSPrefix::co, "co"),
+            (POSPrefix::com, "com"),
+            (POSPrefix::con, "con"),
+            (POSPrefix::ex, "ex"),
+        ];
+
+        for (prefix_enum, prefix_str) in prefixes.iter() {
+            if word.starts_with(prefix_str) {
+                return Ok(*prefix_enum);
+            }
+        }
+
+        Err(Error::Generic("No prefix available".to_string()))
+    }
+}
+
+impl<'a, S> Iterator for POSContextIter<'a, S> 
+    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'b> Deserialize<'b>, Token: TokenKey<S>
+{
+    type Item = POSFeature<S>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+
+        //  Update pointer as necessary
+        if self.inner_index >= self.context.0[self.indices[self.outer_index]].len() {
+            self.inner_index = 0;
+            self.outer_index += 1;
+            if self.outer_index >= self.indices.len() { return None; }
+
+            while self.context.0[self.indices[self.outer_index]].is_empty() {
+                self.outer_index += 1;
+                if self.outer_index >= self.indices.len() {
+                    return None;
+                }
+            }
+        }
+
+        // Check if we're exhausted (ie. only single word being tokenized)
+        if self.context.0[self.indices[self.outer_index]].is_empty() {
+            return None;
+        }
+
+        // GEt next item
+        let f_token = self.context.0[self.indices[self.outer_index]][self.inner_index].clone();
+        self.inner_index += 1;
+
+        Some(f_token.to_feature(self.indices[self.outer_index], 0))
     }
 }
 

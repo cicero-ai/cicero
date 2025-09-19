@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use serde::{Deserialize, Serialize};
@@ -73,7 +74,7 @@ impl VocabMWE {
     pub fn get(&self, phrase: &str) -> i32 {
         let mut current = self;
         for word in phrase.to_lowercase().split(" ").collect::<Vec<&str>>().iter() {
-            match current.children.get(&word.to_string()) {
+            match current.children.get(*word) {
                 Some(next) => current = next.as_ref(),
                 None => return 0,
             }
@@ -95,7 +96,7 @@ impl VocabMWE {
     }
 
     /// Formats a word according to the node's capitalization style (lowercase, uppercase, title case, or original).
-    pub fn format(&self, word: &String) -> String {
+    pub fn format(&self, word: &str) -> String {
         match self.capitalization {
             Capitalization::lower => word.to_lowercase(),
             Capitalization::upper => word.to_uppercase(),

@@ -1,21 +1,21 @@
 
 [workspace]
 members = [
-#    "cicero/client",
-    #"cicero/lib",
-    #"cicero/server",
-    #"evolve",
-    #"quadris",
+    "cicero/client",
+    "cicero/lib",
+    "cicero/server",
+    "evolve",
+    "quadris",
     #"sdk",
     "sophia",
-    #"verax/lib",
-    #"plugins/core",
-    #"deps/atlas",
-    #"deps/falcon-cli",
-    #"deps/http",
-    #"deps/opus",
-    #"deps/parsex",
-    #"deps/sermo"
+    "verax/lib",
+    "plugins/core",
+    "deps/atlas",
+    "deps/falcon-cli",
+    "deps/http",
+    "deps/opus",
+    "deps/parsex",
+    "deps/sermo"
 ]
 resolver = "2"
 

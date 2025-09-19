@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use std::fmt;
@@ -9,6 +10,7 @@ use std::fmt;
 pub enum Error {
     Save(String),
     Load(String),
+    POSPrediction(String),
     Generic(String),
 }
 
@@ -19,6 +21,7 @@ impl fmt::Display for Error {
         match self {
             Error::Save(err) => write!(f, "Save error: {}", err),
             Error::Load(err) => write!(f, "Load error: {}", err),
+            Error::POSPrediction(err) => write!(f, "POS tagger logistic regression error: {}", err),
             Error::Generic(msg) => write!(f, "{}", msg),
         }
     }

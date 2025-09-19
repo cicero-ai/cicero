@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use serde::{Deserialize, Serialize};
@@ -270,15 +271,21 @@ impl POSTag {
         }
     }
 
-    /// Converts an instance of the POSTag enum into a u8 used for training the POS tagger
-    pub fn to_train_u8(&self) -> u8 {
-        let chk_tag = match self {
-            Self::PR | Self::PRP => Self::PR,
-            Self::JJ | Self::JJR | Self::JJS => Self::JJ,
-            Self::RB | Self::RBR | Self::RBS => Self::RB,
-            _ => *self,
-        };
-        chk_tag.to_u8()
+    /// Convert tag to a shortened version -- used for training 
+    /// of cohorts based model to assist with automated spelling corrections.
+    pub fn to_short_tag(&self) -> Self {
+        match *self {
+            Self::CC|Self::CS|Self::CA => Self::CC,
+            Self::DT|Self::PDT|Self::WDT => Self::DT,
+            Self::IN => Self::IN,
+            Self::JJ|Self::JJR|Self::JJS => Self::JJ,
+            Self::NN|Self::NNS|Self::NNP|Self::NNPS|Self::NM|Self::NZ => Self::NN,
+            Self::PR|Self::PRP|Self::WPR|Self::WPRP => Self::PR,
+            Self::PUNC|Self::SS => Self::PUNC,
+            Self::RB|Self::RBR|Self::RBS|Self::WRB => Self::RB,
+            Self::VB|Self::VBD|Self::VBG|Self::VBN|Self::VBP|Self::VBZ|Self::MD => Self::VB,
+            _ => Self::FW
+        }
     }
 
     /// Check whether the POS tag belongs to a noun
@@ -291,8 +298,24 @@ impl POSTag {
         self.to_str().starts_with("V")
     }
 
+    /// Check whether the POS tag belongs to a conjunction
+    pub fn is_conjunction(&self) -> bool {
+        self.to_str().starts_with("C")
+    
+}
+    /// Check whether the POS tag belongs to a base verb
+    pub fn is_base_verb(&self) -> bool {
+        *self == Self::VB || *self == Self::VBG
+    }
+
+
     pub fn is_punctuation(&self) -> bool {
         *self == Self::SS || *self == Self::PUNC
+    }
+
+    /// Check whether or not tag belongs to a pronoun
+    pub fn is_pronoun(&self) ->bool {
+        *self == Self::PR || *self == Self::PRP
     }
 
     /// Check whether the POS tag belongs to a adjective

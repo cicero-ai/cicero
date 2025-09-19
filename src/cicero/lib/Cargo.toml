@@ -1,7 +1,13 @@
 [package]
 name = "cicero"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+authors = ["Aquila Labs"]
+homepage = "https://cicero.sh/"
+readme = "README.md"
+license="PolyForm-Noncommercial-1.0.0"
+repository = "https://github.com/cicero-ai/cicero"
+
 
 [dependencies]
 aes-gcm = "0.10.3"

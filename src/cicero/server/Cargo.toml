@@ -1,7 +1,12 @@
 [package]
 name = "cicero-server"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+authors = ["Aquila Labs"]
+homepage = "https://cicero.sh/"
+readme = "README.md"
+license="PolyForm-Noncommercial-1.0.0"
+repository = "https://github.com/cicero-ai/cicero"
 
 [dependencies]
 atlas-http = { path = "../../deps/http" }

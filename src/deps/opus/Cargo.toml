@@ -4,13 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["rocks", "sql"]
+default = ["sql"]
 rocks = ["rocksdb"]
 sql = ["sqlx", "tokio"]
 
 [dependencies]
 rocksdb = { version = "0.22.0", optional = true }
-sqlx = { version = "0.8.0", features = ["sqlite", "mysql", "postgres", "runtime-tokio", "macros"], optional = true }
+sqlx = { version = "0.8.6", features = ["sqlite", "mysql", "postgres", "runtime-tokio", "macros"], optional = true }
 tokio = { version = "1.39.2", features = ["full", "rt-multi-thread"], optional = true }
 
 

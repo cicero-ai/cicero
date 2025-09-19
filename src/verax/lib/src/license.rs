@@ -34,7 +34,9 @@ impl License {
 
     /// Load license
     pub fn load() -> Self {
-        let bytes = include_bytes!("/home/boxer/devel/cicero/cicero/src/verax/data/local/license.dat");
+        let filename = "/home/boxer/devel/cicero/cicero/src/verax/data/local/license.dat";
+        //let bytes = include_bytes!("/home/boxer/devel/cicero/cicero/src/verax/data/local/license.dat");
+        let bytes = fs::read(&filename).unwrap();
         let license: License = bincode::deserialize(&bytes[..]).unwrap();
         license
     }
