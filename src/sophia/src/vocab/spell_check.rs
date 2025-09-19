@@ -4,12 +4,12 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use std::fmt;
 use super::VocabDatabase;
-use crate::pos_tagger::{POSTag, POSSuffix, POSPrefix};
+use crate::pos_tagger::{POSPrefix, POSSuffix, POSTag};
 use crate::tokenizer::Token;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
 
 const MAX_FREQUENCY: usize = 3;
 const FREQUENCY_WEIGHT: f32 = 0.40;
@@ -27,13 +27,13 @@ pub struct SpellChecker {
     pub cohorts: HashMap<SpellCheckerCohort, Vec<SpellCheckerEntry>>,
 }
 
-/// Individual entry for a candidate, stores 
+/// Individual entry for a candidate, stores
 /// preceeding tag / word frequency for weighted scoring.
 #[derive(Default, Clone, Serialize, Deserialize)]
 pub struct SpellCheckerEntry {
     pub word_index: i32,
     pub tag_before: Vec<POSTag>,
-    pub word_before: Vec<i32>
+    pub word_before: Vec<i32>,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
@@ -54,14 +54,14 @@ pub enum SpellCheckerCohortPOS {
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub enum SpellCheckerCohortSize {
-    short,  // <= 4 chars
-    short_medium,  // 5 or 6 chars
-    medium, // 7 or 8 chars
+    short,        // <= 4 chars
+    short_medium, // 5 or 6 chars
+    medium,       // 7 or 8 chars
     medium_long,  // 9 or 10 chars
-    long, // 11+ chars
+    long,         // 11+ chars
 }
 
-/// Candidate spelling correct, used to rank and 
+/// Candidate spelling correct, used to rank and
 //  score possible corrections.
 #[derive(Default, Clone)]
 struct Candidate {
@@ -74,25 +74,31 @@ struct Candidate {
     pub word_before: usize,
     pub same_suffix: bool,
     pub same_prefix: bool,
-    pub has_double_letter: bool
+    pub has_double_letter: bool,
 }
 
 impl SpellChecker {
     /// Check word for corrected spelling
-    pub fn try_correct(&self, position: usize, tokens: &[Token], vocab: &VocabDatabase) -> Option<Token> {
-
+    pub fn try_correct(
+        &self,
+        position: usize,
+        tokens: &[Token],
+        vocab: &VocabDatabase,
+    ) -> Option<Token> {
         // Get candidates
-        let mut candidates =  self.get_candidates(&tokens[position], vocab);
+        let mut candidates = self.get_candidates(&tokens[position], vocab);
 
         // Look for spelling correction
         for queue in &mut candidates {
-            if queue.is_empty() { continue; }
+            if queue.is_empty() {
+                continue;
+            }
 
             // Score candidates
             self.score_candidates(queue, position, tokens);
 
             // Sort candidates
-            queue.sort_unstable_by(|a,b| b.score.partial_cmp(&a.score).unwrap());
+            queue.sort_unstable_by(|a, b| b.score.partial_cmp(&a.score).unwrap());
             return Some(queue[0].token.clone());
         }
 
@@ -101,32 +107,37 @@ impl SpellChecker {
 
     /// Get cohort based on POS tag and length
     fn get_cohorts(&self, token: &Token) -> Vec<SpellCheckerCohort> {
-
         // Get tags
-        let tags = token.pos_prediction.probabilities.iter()
+        let tags = token
+            .pos_prediction
+            .probabilities
+            .iter()
             .filter(|(_, score)| **score >= 0.2)
-            .map(|(tag, _)| *tag).collect::<Vec<POSTag>>();
+            .map(|(tag, _)| *tag)
+            .collect::<Vec<POSTag>>();
 
         // Go through tags
-        let cohorts: Vec<SpellCheckerCohort> = tags.iter().flat_map(|tag| {
-            let pos = SpellCheckerCohortPOS::from(*tag);
-            let sizes = SpellCheckerCohortSize::get_sizes(token.word.len());
+        let cohorts: Vec<SpellCheckerCohort> = tags
+            .iter()
+            .flat_map(|tag| {
+                let pos = SpellCheckerCohortPOS::from(*tag);
+                let sizes = SpellCheckerCohortSize::get_sizes(token.word.len());
 
-            sizes.iter().map(|length| {
-                SpellCheckerCohort {
-                    pos: pos.clone(),
-                    length: length.clone()
-                }
-            }).collect::<Vec<SpellCheckerCohort>>()
-
-        })  .collect();
+                sizes
+                    .iter()
+                    .map(|length| SpellCheckerCohort {
+                        pos: pos.clone(),
+                        length: length.clone(),
+                    })
+                    .collect::<Vec<SpellCheckerCohort>>()
+            })
+            .collect();
 
         cohorts
     }
 
-        // Get initial candidates, sorted by distance
+    // Get initial candidates, sorted by distance
     fn get_candidates(&self, token: &Token, vocab: &VocabDatabase) -> Vec<Vec<Candidate>> {
-
         // Get cohorts
         let cohorts = self.get_cohorts(token);
         let mut candidates: Vec<Vec<Candidate>> = vec![vec![]; 4];
@@ -134,10 +145,9 @@ impl SpellChecker {
 
         // Go through cohorts
         for cohort in cohorts.iter() {
-
             let search = match self.cohorts.get(cohort) {
                 Some(r) => r,
-                None => continue
+                None => continue,
             };
 
             // Initialize variables
@@ -155,9 +165,9 @@ impl SpellChecker {
                 let lev_distance = self.levenshtein(&word, &s_token.word);
                 let distance = candidates.len().saturating_sub(lev_distance);
                 if distance > 0 && lev_distance > 0 {
-                    candidates[lev_distance-1].push( Candidate ::new(frequency, distance, & s_token, item) );
+                    candidates[lev_distance - 1]
+                        .push(Candidate::new(frequency, distance, &s_token, item));
                 }
-
             }
         }
 
@@ -166,49 +176,54 @@ impl SpellChecker {
 
     // Score candidates
     fn score_candidates(&self, candidates: &mut [Candidate], position: usize, tokens: &[Token]) {
-
         // Iterate through candidates
         for cand in candidates.iter_mut() {
-
             // Get preceding tag and word score
             if position > 0 {
-                if let Some(idx) = cand.item.tag_before.iter().position(|&tag| tag == tokens[position-1].pos) {
+                if let Some(idx) =
+                    cand.item.tag_before.iter().position(|&tag| tag == tokens[position - 1].pos)
+                {
                     cand.tag_before = self.get_frequency_idx(idx, cand.item.tag_before.len());
                 }
 
-                if let Some(idx) = cand.item.word_before.iter().position(|&w_idx| w_idx == tokens[position-1].index) {
+                if let Some(idx) = cand
+                    .item
+                    .word_before
+                    .iter()
+                    .position(|&w_idx| w_idx == tokens[position - 1].index)
+                {
                     cand.word_before = self.get_frequency_idx(idx, cand.item.word_before.len());
                 }
             }
 
             // Check suffix
             if let Ok(suffix) = POSSuffix::try_from(&tokens[position])
-                && let Ok(chk_suffix) = POSSuffix::try_from(&cand.token) {
-                    cand.same_suffix = suffix == chk_suffix;
-                }
+                && let Ok(chk_suffix) = POSSuffix::try_from(&cand.token)
+            {
+                cand.same_suffix = suffix == chk_suffix;
+            }
 
             // Check prefix
             if let Ok(prefix) = POSPrefix::try_from(&tokens[position])
-                && let Ok(chk_prefix) = POSPrefix::try_from(&cand.token) {
-                    cand.same_prefix = prefix == chk_prefix;
-                }
+                && let Ok(chk_prefix) = POSPrefix::try_from(&cand.token)
+            {
+                cand.same_prefix = prefix == chk_prefix;
+            }
 
             // Check double letter
-            cand.has_double_letter = self.check_double_letter(&tokens[position].word.to_lowercase(), &cand.token.word);
+            cand.has_double_letter =
+                self.check_double_letter(&tokens[position].word.to_lowercase(), &cand.token.word);
 
             // Score candidate
             cand.score = cand.calculate_score();
         }
-
     }
 
     // Check whether or not word has double letter typo
     fn check_double_letter(&self, word: &str, candidate_word: &str) -> bool {
-
         let letters: Vec<char> = word.chars().collect();
         for (x, char) in letters[1..].iter().enumerate() {
             if *char == letters[x] {
-
                 // Check if candidate has double letter
                 let chk = format!("{}{}", char, char);
                 if !candidate_word.contains(&chk) {
@@ -271,27 +286,48 @@ impl Candidate {
         Self {
             token: token.clone(),
             item: item.clone(),
-            frequency, distance,
+            frequency,
+            distance,
             ..Default::default()
         }
     }
 
     /// Score the candidate
     pub fn calculate_score(&mut self) -> f32 {
-        let mut score = (self.frequency as f32 * FREQUENCY_WEIGHT) + (self.distance as f32 * DISTANCE_WEIGHT);
-        score += (self.tag_before as f32 * TAG_BEFORE_WEIGHT) + (self.word_before as f32 * WORD_BEFORE_WEIGHT);
+        let mut score =
+            (self.frequency as f32 * FREQUENCY_WEIGHT) + (self.distance as f32 * DISTANCE_WEIGHT);
+        score += (self.tag_before as f32 * TAG_BEFORE_WEIGHT)
+            + (self.word_before as f32 * WORD_BEFORE_WEIGHT);
 
-        if self.same_suffix { score += SUFFIX_BONUS; }
-        if self.same_prefix { score += PREFIX_BONUS; }
-        if self.has_double_letter { score += DOUBLE_LETTER_BONUS; }
+        if self.same_suffix {
+            score += SUFFIX_BONUS;
+        }
+        if self.same_prefix {
+            score += PREFIX_BONUS;
+        }
+        if self.has_double_letter {
+            score += DOUBLE_LETTER_BONUS;
+        }
 
         score
     }
 }
 
 impl fmt::Debug for Candidate {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "word {} pos {} score {:.2} frequency {} distance {} tag_before {} word before {} suffix {} prefix {}", self.token.word, self.token.pos, self.score, self.frequency, self.distance, self.tag_before, self.word_before, self.same_suffix, self.same_prefix)
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "word {} pos {} score {:.2} frequency {} distance {} tag_before {} word before {} suffix {} prefix {}",
+            self.token.word,
+            self.token.pos,
+            self.score,
+            self.frequency,
+            self.distance,
+            self.tag_before,
+            self.word_before,
+            self.same_suffix,
+            self.same_prefix
+        )
     }
 }
 
@@ -303,7 +339,7 @@ impl From<POSTag> for SpellCheckerCohortPOS {
             t if t.is_verb() => Self::verb,
             t if t.is_adverb() => Self::adverb,
             t if t.is_adjective() => Self::adjective,
-            _ => Self::other
+            _ => Self::other,
         }
     }
 }
@@ -315,7 +351,7 @@ impl From<usize> for SpellCheckerCohortSize {
             len if len <= 6 => Self::short_medium,
             len if len <= 8 => Self::medium,
             len if len <= 10 => Self::medium_long,
-            _ => Self::long
+            _ => Self::long,
         }
     }
 }
@@ -324,11 +360,10 @@ impl SpellCheckerCohortSize {
     pub fn get_sizes(length: usize) -> Vec<Self> {
         match length {
             len if len <= 3 => vec![Self::short],
-        len if len <= 5 => vec![Self::short, Self::short_medium],
-        len if len <= 7 => vec![Self::short_medium, Self::medium],
-        len if len <= 11 => vec![Self::medium, Self::medium_long, Self::long],
-            _ => vec![Self::medium_long, Self::long]
+            len if len <= 5 => vec![Self::short, Self::short_medium],
+            len if len <= 7 => vec![Self::short_medium, Self::medium],
+            len if len <= 11 => vec![Self::medium, Self::medium_long, Self::long],
+            _ => vec![Self::medium_long, Self::long],
         }
     }
 }
-

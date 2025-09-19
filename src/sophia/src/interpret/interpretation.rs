@@ -4,7 +4,6 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-
 use super::{Buffer, Phrase};
 use crate::tokenizer::Token;
 use std::collections::HashMap;

@@ -14,7 +14,8 @@ pub use self::mwe::{Capitalization, MWEType, VocabMWE};
 pub use self::phrase_intents::{PhraseIntent, PhraseIntents};
 pub use self::pronoun::{Pronoun, PronounCategory, PronounGender, PronounNumber, PronounPerson};
 pub use self::spell_check::{
-    SpellChecker, SpellCheckerCohort, SpellCheckerEntry, SpellCheckerCohortPOS, SpellCheckerCohortSize,
+    SpellChecker, SpellCheckerCohort, SpellCheckerCohortPOS, SpellCheckerCohortSize,
+    SpellCheckerEntry,
 };
 pub use self::stats::VocabStats;
 

@@ -423,10 +423,11 @@ impl PhraseBuffer {
         // preposition
         if let Some(pos) =
             self.tokens[start..end + 1].iter().position(|token| token.pos == POSTag::IN)
-            && self.tokens[pos].word.as_str() != "of" {
-                self.do_split(pos + start);
-                return;
-            }
+            && self.tokens[pos].word.as_str() != "of"
+        {
+            self.do_split(pos + start);
+            return;
+        }
 
         // Look for common or semi-colon
         if let Some(pos) = self.tokens[start..end + 1]

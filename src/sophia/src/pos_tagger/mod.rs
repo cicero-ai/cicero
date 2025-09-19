@@ -4,12 +4,18 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use crate::tokenizer::Token;
-pub use self::context::{POSContext, POSFeature, POSFeatureToken, POSTagGroup, POSWordGroup, POSSuffix, POSPrefix, SIBLING_TAGS_BEFORE, SIBLING_TAGS_AFTER, AUXILLARY_VERBS, PASSIVE_INDICATORS, COMMON_ADVERBS, TEMPORAL_ADVERBS};
+pub use self::context::{
+    AUXILLARY_VERBS, COMMON_ADVERBS, PASSIVE_INDICATORS, POSContext, POSFeature, POSFeatureToken,
+    POSPrefix, POSSuffix, POSTagGroup, POSWordGroup, SIBLING_TAGS_AFTER, SIBLING_TAGS_BEFORE,
+    TEMPORAL_ADVERBS,
+};
 pub use self::hmm::{HMM, TOTAL_TAGS};
-pub use self::model::{POSModel, POSModelInterface, POSConjunction, POSWeight, POSTagModel, POSTagModelRepo};
+pub use self::model::{
+    POSConjunction, POSModel, POSModelInterface, POSTagModel, POSTagModelRepo, POSWeight,
+};
 pub use self::pos_tag::POSTag;
-pub use self::tagger::{POSTagger, POSPrediction, POSPredictionMethod};
+pub use self::tagger::{POSPrediction, POSPredictionMethod, POSTagger};
+use crate::tokenizer::Token;
 
 mod context;
 mod hmm;
@@ -29,8 +35,6 @@ impl TokenKey<i32> for Token {
 
 impl TokenKey<String> for Token {
     fn get_key(&self) -> String {
-    self.word.to_string()
+        self.word.to_string()
     }
 }
-
-

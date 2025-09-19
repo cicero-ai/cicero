@@ -32,7 +32,7 @@ impl VocabCache {
                 return Err(Error::Load(format!(
                     "Unable to load vocabulary cache, {}",
                     e
-                )))
+                )));
             }
         };
 
@@ -48,7 +48,7 @@ impl VocabCache {
                 return Err(Error::Save(format!(
                     "Unable to serialize vocabulary cache, {}",
                     e
-                )))
+                )));
             }
         };
         fs::write(&cache_file, &encoded)?;
