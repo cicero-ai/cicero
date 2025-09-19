@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use serde::{Deserialize, Serialize};
@@ -24,6 +25,11 @@ impl f8 {
         }
     }
 
+    /// Converts the f8 value to a f32 in the range [0.0, 1.0].
+    pub fn to_f32(&self) -> f32 {
+        self.sum as f32 / 255.0
+    }
+
     /// Calculates the sum of all values in the f8 instance as a u16.
     fn calculate_sum(&self) -> u16 {
         self.values.iter().map(|&v| v as u16).sum()
@@ -34,10 +40,6 @@ impl f8 {
         self.sum
     }
 
-    /// Converts the f8 value to a f32 in the range [0.0, 1.0].
-    pub fn to_f32(&self) -> f32 {
-        self.sum as f32 / 255.0
-    }
 }
 
 impl From<f32> for f8 {

@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use super::{Token, TokenCleaner, TokenizedInput, MWE};
@@ -20,6 +21,7 @@ static PREFIX_FUTURE_DATE_WORDS: &[&str] = &["next", "following"];
 pub struct Tokenizer {}
 
 /// A buffer for tokenization, storing output tokens, words, and state for handling MWEs, possessives, and special tags.
+#[derive(Default)]
 pub struct Buffer {
     pub output: TokenizedInput,
     pub words: Vec<String>,
@@ -54,8 +56,8 @@ impl Tokenizer {
             }
 
             // Initial check
-            if buffer.prev_tag.as_str() == "|num|" && vocab.preprocess.hashes.contains_key(&word) {
-                let (tag, unit) = vocab.preprocess.hashes.get(&word).unwrap();
+            if buffer.prev_tag.as_str() == "|num|" && vocab.preprocess.hashes.contains_key(&word.to_lowercase()) {
+                let (tag, unit) = vocab.preprocess.hashes.get(&word.to_lowercase()).unwrap();
                 buffer.push_token(Token::special(&word, tag, "", unit, vocab));
                 continue;
             }
@@ -83,9 +85,9 @@ impl Tokenizer {
             buffer.push_suffix();
             buffer.suffix.clear();
         }
-
+//println!("Before word {} index {} tag {}", buffer.output.tokens[47].word, buffer.output.tokens[47].index, buffer.output.tokens[47].pos.to_string()); 
         // Apply POS tagging
-        vocab.words.pos_tagger.apply(&mut buffer.output, &vocab);
+        vocab.words.pos_tagger.apply(&mut buffer.output, vocab);
 
         buffer.output
     }
@@ -93,9 +95,7 @@ impl Tokenizer {
     /// Performs initial cleaning of input text, removing non-ASCII characters, leading symbols, and adding newline markers.
     fn initial_clean(&self, input: &str) -> String {
         let re = Regex::new(r"^[\-\_\=\#\@\!]+").unwrap();
-        let result = input
-            .to_string()
-            .split("\n")
+        let result = input.split("\n")
             .map(|line| format!("{} |NL| ", re.replace(line, " ").trim()))
             .filter(|lc| !lc.is_empty())
             .collect::<Vec<String>>();
@@ -121,7 +121,7 @@ impl Tokenizer {
             None => return word.to_string(),
         };
         // Contraction
-        if *tag == "|contraction|".to_string() {
+        if tag.as_str() == "|contraction|" {
             let words: Vec<String> = value.split(" ").map(String::from).collect();
             for tmp_word in words.iter().skip(1).rev() {
                 buffer.words.insert(0, tmp_word.clone());
@@ -216,7 +216,7 @@ impl Tokenizer {
         loop {
             index = match index.children.get(&buffer.words[x].to_lowercase().to_string()) {
                 Some(r) => r,
-                None => match index.children.get(&"[verb]".to_string()) {
+                None => match index.children.get("[verb]") {
                     Some(rc) => rc,
                     None => break,
                 },
@@ -255,14 +255,7 @@ impl Buffer {
         Self {
             output: TokenizedInput::new(input),
             words: clean_str.split(" ").map(|w| w.to_string()).collect::<Vec<String>>(),
-            is_possessive: false,
-            not_position: None,
-            have_position: None,
-            had_position: None,
-            prev_tag: String::new(),
-            suffix: Vec::new(),
-            mwe_length: 0,
-            mwe_scoring_length: 0,
+            ..Default::default()
         }
     }
 
@@ -497,7 +490,7 @@ impl Buffer {
     }
 
     /// Adds a future verb token to the output, setting its properties and MWE based on the provided phrase.
-    pub fn add_future_verb(&mut self, mut token: Token, phrase: &Vec<String>) {
+    pub fn add_future_verb(&mut self, mut token: Token, phrase: &[String]) {
         token.word = phrase.join(" ");
         token.is_negative = phrase.contains(&"not".to_string());
         token.pos = if token.pos == POSTag::VB {
@@ -520,7 +513,7 @@ impl Buffer {
         &mut self,
         index: &i32,
         _single_token: &Token,
-        mwe: &Vec<String>,
+        mwe: &[String],
         vocab: &VocabDatabase,
     ) {
         let mut token = Token::from_id(*index, vocab);
@@ -546,7 +539,7 @@ impl Buffer {
     }
 
     /// Adds a scoring MWE to the output, using the provided index and phrase.
-    pub fn add_mwe_scoring(&mut self, index: &i32, mwe: &Vec<String>, vocab: &VocabDatabase) {
+    pub fn add_mwe_scoring(&mut self, index: &i32, mwe: &[String], vocab: &VocabDatabase) {
         let mut token = Token::from_id(*index, vocab);
         token.word = mwe.join(" ");
         self.mwe_scoring_length = mwe.len();

@@ -1,376 +1,150 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use super::{POSTag, POSTagger, POSTaggerLayer, POSTaggerScores};
-use crate::tokenizer::TokenizedInput;
-use crate::vocab::f8::f8;
-use crate::vocab::VocabDatabase;
 use std::collections::HashMap;
-use std::fmt;
+use serde::{Serialize, Deserialize};
+use super::{POSModel, POSModelInterface, POSTag, POSTagModelRepo, HMM};
+use crate::tokenizer::{TokenizedInput, Token};
+use crate::vocab::VocabDatabase;
 
-const TAG_SCORE: f32 = 0.3;
-const BEFORE_BIGRAM_SCORE: f32 = 0.6;
-const AFTER_BIGRAM_SCORE: f32 = 0.4;
-const BEFORE_WEIGHTS: [f32; 4] = [0.7, 0.4, 0.3, 0.2];
-const AFTER_WEIGHTS: [f32; 2] = [0.85, 0.25];
-const INITIAL_WEIGHTS: [f32; 2] = [0.65, 0.35];
-
-/// A buffer for storing part-of-speech tags and resolved word scores during tagging.
-#[derive(Default)]
-struct Buffer {
-    pub start: usize,
-    pub tags: Vec<POSTag>,
-    pub words: Vec<ResolvedScore>,
+/// The POS tagger itself including the base HMM,
+/// along with tag and word based post processing models
+#[derive(Default, Serialize, Deserialize)]
+pub struct POSTagger {
+    pub hmm: HMM<i32>,
+    pub cohort: POSModel<i32>,
+    pub tags: POSTagModelRepo<i32>,
+    pub words: HashMap<i32, POSModel<i32>>
 }
 
-/// Represents a resolved score for a word, including its position, assigned tag, maximum score, and score distribution for possible tags.
-#[derive(Default)]
-struct ResolvedScore {
-    pub is_exact: bool,
-    pub position: usize,
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct POSPrediction {
+    pub method: POSPredictionMethod,
+    pub word: String,
+    pub prev_tag: POSTag,
     pub tag: POSTag,
-    pub max_score: f32,
-    pub scores: HashMap<POSTag, f32>,
+    pub confidence: f32,
+    pub probabilities: HashMap<POSTag, f32>,
+    pub conjunctions: Vec<String>
 }
 
-impl POSTagger<f8, i32> {
-    /// Applies part-of-speech tagging to the tokenized input, resolving ambiguous words and completing sentences using the vocabulary database.
+#[derive(Default, Debug, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize)]
+pub enum POSPredictionMethod {
+    #[default]
+    non_ambiguous,
+    hmm,
+    standard,
+    conjunction,
+    deterministic_rule,
+    exception
+}
+
+impl POSTagger {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Applies part-of-speech tagging to the tokenized input, resolving ambiguous words
     pub fn apply(&self, output: &mut TokenizedInput, vocab: &VocabDatabase) {
-        // Initialize
-        let mut buffer = Buffer::default();
+
+        // Fix spelling typos
+        self.fix_spelling_typos(output, vocab);
+
+        // Resolve via HMM model
+        self.hmm.apply(&mut output.tokens);
 
         // Iterate through words
-        for x in 0..output.tokens.len() {
-            // Correct spelling typo
-            if output.tokens[x].pos == POSTag::FW {
-                self.fix_typo(x, output, &vocab);
+        for position in 0..output.tokens.len() {
+            if output.tokens[position].potential_pos.len() < 2 { continue; }
+
+            // Resolve ambiguity
+            if let Some(pred) = self.resolve(position, output) {
+                output.tokens[position].pos_prediction = pred.clone();
+                if output.tokens[position].pos != pred.tag
+                    && let Some(new_token) = output.tokens[position].update_pos(pred.tag, vocab) {
+                        output.tokens[position] = new_token;
+                    }
             }
 
-            // Resolve ambiguous word
-            if let Some(layer) = self.tag2word.get(&output.tokens[x].index) {
-
-                let score = layer.resolve(&buffer);
-                buffer.tags.push(score.tag);
-                buffer.words.push(score);
-
-            // Complete sentence, if stopper
-            } else if output.tokens[x].pos == POSTag::SS {
-                self.complete_sentence(&mut buffer, output, vocab);
-                buffer = Buffer::new(x + 1);
-            } else {
-                buffer.tags.push(output.tokens[x].pos);
-            }
-        }
-
-        // Complete buffer
-        if !buffer.words.is_empty() {
-            self.complete_sentence(&mut buffer, output, vocab);
         }
     }
 
-    /// Completes a sentence by verifying and updating POS tags for ambiguous words in the buffer, applying changes to the tokenized input.
-    fn complete_sentence(
-        &self,
-        buffer: &mut Buffer,
-        output: &mut TokenizedInput,
-        vocab: &VocabDatabase,
-    ) {
-        if buffer.words.is_empty() {
-            return;
-        }
+    /// Fix spelling typos
+    fn fix_spelling_typos(&self, output: &mut TokenizedInput, vocab: &VocabDatabase) {
 
-        // Verify by checking following tags of ambiguous words
-        for x in 0..buffer.words.len() {
-            let buffer_pos = buffer.start + buffer.words[x].position;
-            let layer = self.tag2word.get(&output.tokens[buffer_pos].index).unwrap();
+        for position in 0..output.tokens.len() {
+            if output.tokens[position].pos !=  POSTag::FW { continue; }
 
-            let tag = match layer.after.verify_score(x, buffer) {
-                Some(r) => r,
-                None => buffer.words[x].tag,
-            };
-            if tag == output.tokens[buffer.words[x].position].pos {
-                continue;
-            }
+            // Get initial prediction
+            if let Some(pred) = self.cohort.predict_cohort(position, &output.tokens) {
+                output.tokens[position].pos_prediction = pred;
 
-            // Update POS tag
-            if let Some(new_token) = output.tokens[buffer_pos].update_pos(tag, vocab) {
-                output.tokens[buffer_pos] = new_token;
-            }
-        }
-    }
-
-    /// Try to fix a spelling typo
-    fn fix_typo(&self, position: usize, output: &mut TokenizedInput, vocab: &VocabDatabase) {
-        let start = position.saturating_sub(8);
-        let end = (position + 4).min(output.tokens.len() - 1);
-
-        // Predict tag
-        let buffer =
-            output.tokens[start..end].iter().map(|token| token.pos).collect::<Vec<POSTag>>();
-        let buffer_pos = if position >= 8 { 8 } else { position };
-        let new_tag = self.tag2tag.predict(buffer_pos, &buffer);
-
-        // Check spell checker
-        if let Some(correct) = vocab.preprocess.spellchecker.try_correct(
-            &output.tokens[position].word,
-            new_tag,
-            &vocab.words,
-        ) {
-            output.tokens[position] = correct;
-        }
-    }
-
-}
-
-impl POSTaggerLayer<f8> {
-    /// Predicts the next token based on both, preceeding and following contexts at once.
-    /// Intended when full context is available vs. standard sequential POS tagging
-    fn predict(&self, position: usize, buffer: &Vec<POSTag>) -> POSTag {
-        if position >= buffer.len() {
-            return POSTag::FW;
-        }
-
-        // Check for single buffer
-        if buffer.len() == 1 || position + 1 == buffer.len() {
-            return buffer[position];
-        }
-
-        // Initialize variables
-        let (mut max_tag, mut max_score) = (buffer[position].clone(), 0.0);
-        let mut scores: HashMap<POSTag, f32> = HashMap::new();
-
-        // Initial
-        if position == 0 {
-            let tags = buffer[1..].to_vec().into_iter().take(4).collect::<Vec<POSTag>>();
-            let bigram_scores = self.initial.calculate_bigram_score(&tags, &INITIAL_WEIGHTS);
-            for (tag, score) in bigram_scores.iter() {
-                if *score > max_score {
-                    max_tag = *tag;
-                    max_score = *score;
-                }
-            }
-
-            if max_score > 0.0 {
-                return max_tag;
-            }
-        }
-
-        // Before scores
-        if position > 0 {
-            let start = position.saturating_sub(8);
-            let before_tags =
-                buffer[start..position].to_vec().into_iter().rev().collect::<Vec<POSTag>>();
-            let bigram_scores = self.before.calculate_bigram_score(&before_tags, &BEFORE_WEIGHTS);
-
-            // Apply bigram weight
-            for (tag, score) in bigram_scores.iter() {
-                scores.insert(*tag, *score * BEFORE_BIGRAM_SCORE);
-            }
-        }
-
-        // Get after scores
-        if position > buffer.len() {
-            let tags = buffer[position..].to_vec().into_iter().take(4).collect::<Vec<POSTag>>();
-            let bigram_scores = self.after.calculate_bigram_score(&tags, &INITIAL_WEIGHTS);
-
-            for (tag, score) in bigram_scores.iter() {
-                *scores.entry(*tag).or_insert(0.0) += score * AFTER_BIGRAM_SCORE;
-            }
-        }
-
-        // Check bigram scores
-        for (tag, score) in scores.iter() {
-            if *score > max_score {
-                max_tag = *tag;
-                max_score = *score;
-            }
-        }
-
-        max_tag
-    }
-
-    /// Resolves the POS tag for a word by calculating bigram scores from previous tags and selecting the highest-scoring tag.
-    fn resolve(&self, buffer: &Buffer) -> ResolvedScore {
-
-        let mut res = ResolvedScore::new(buffer.tags.len());
-
-        if buffer.tags.len() >= 4 {
-            let quadgram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 4..]);
-            if let Some(tag) = self.before.exact_matches.get(&quadgram_key) {
-                res.is_exact = true;
-                res.tag = *tag;
-                return res;
-            }
-        }
-        if buffer.tags.len() >= 3 {
-            let trigram_key = self.bit_pack_context(&buffer.tags[buffer.tags.len() - 3..]);
-            if let Some(tag) = self.before.exact_matches.get(&trigram_key) {
-                res.is_exact = true;
-                res.tag = *tag;
-                return res;
-            }
-        }
-
-        // Get bigram scores, if we have previous words
-        let mut bigram_scores: HashMap<POSTag, f32> = HashMap::new();
-        if !buffer.tags.is_empty() {
-            let tags = buffer.tags.clone().into_iter().rev().take(8).collect::<Vec<POSTag>>();
-            bigram_scores = self.before.calculate_bigram_score(&tags, &BEFORE_WEIGHTS)
-        }
-
-        // Get highest score
-        let (mut max_tag, mut max_score) = (POSTag::FW, 0.0);
-        for (tag, score_f8) in self.tags.iter() {
-            let score = match bigram_scores.get(tag) {
-                Some(bigram_score) => {
-                    (score_f8.to_f32() * TAG_SCORE) + (bigram_score * BEFORE_BIGRAM_SCORE)
-                }
-                None => score_f8.to_f32() * TAG_SCORE,
-            };
-            res.scores.insert(*tag, score);
-
-            if score > max_score {
-                max_score = score;
-                max_tag = *tag;
-            }
-        }
-
-        // Set results
-        res.max_score = max_score;
-        res.tag = max_tag;
-
-        res
-    }
-
-    fn bit_pack_context(&self, context: &[POSTag]) -> u32 {
-        let mut key = 0u32;
-        for (i, tag) in context.iter().enumerate() {
-            key |= ((tag.to_u8() & 0x3F) as u32) << (6 * (context.len() - 1 - i));
-        }
-        key
-    }
-
-}
-
-impl POSTaggerScores<f8> {
-    /// Calculates bigram scores for a sequence of tags, weighting them according to provided weights and averaging scores per tag.
-    pub fn calculate_bigram_score(
-        &self,
-        buffer: &Vec<POSTag>,
-        weights: &[f32],
-    ) -> HashMap<POSTag, f32> {
-
-        // Initialize
-        let mut scores: HashMap<POSTag, Vec<f32>> = HashMap::new();
-
-        // Iterate through bigrams
-        for (offset, chunk) in buffer.chunks(2).enumerate() {
-            let bigram = if chunk.len() == 1 {
-                (chunk[0].to_u8() << 6) as u16
-            } else {
-                ((chunk[0].to_u8() << 6) | chunk[1].to_u8()) as u16
-            };
-
-            if let Some(score_map) = self.bigrams[offset].0.get(&bigram) {
-                for (tag, score) in score_map.iter() {
-                    scores.entry(*tag).or_default().push(score.to_f32() * weights[offset]);
+                // Get spelling correction
+                if let Some(correction) = vocab.preprocess.spellchecker.try_correct(position, &output.tokens, vocab) {
+                    output.tokens[position] = correction;
                 }
             }
         }
-        if scores.is_empty() {
-            return HashMap::new();
-        }
-
-        // Create results
-        let mut res: HashMap<POSTag, f32> = HashMap::new();
-        for (tag, scores_vec) in scores.iter() {
-            let score = scores_vec.clone().into_iter().sum::<f32>() / scores_vec.len() as f32;
-            //if tag.is_verb() { score *= 1.3; }
-
-            res.insert(*tag, score);
-        }
-
-        res
     }
-    /// Verifies the score of a word by calculating bigram scores for following tags, updating the tag if a higher score is found.
-    fn verify_score(&self, word_x: usize, buffer: &Buffer) -> Option<POSTag> {
-        if buffer.tags.len() < (buffer.words[word_x].position + 2) {
-            return None;
+
+    // Resolve ambiguity
+    fn resolve(&self, position: usize, output: &TokenizedInput) -> Option<POSPrediction> {
+
+        // Check word models
+        if let Some(model) = self.words.get(&output.tokens[position].index)
+            && let Some(pred) = model.predict(position, &output.tokens) {
+                return Some(pred);
+            }
+
+        // Check tag models
+        if let Some(pred) = self.check_tag_models(position, &output.tokens) {
+            return Some(pred);
         }
 
-        // Exact match
-        if buffer.words[word_x].is_exact {
-            return Some(buffer.words[word_x].tag);
-        }
+        None
+    }
 
-        // Get next tags
-        let end = (buffer.words[word_x].position + 5).min(buffer.tags.len());
-        let tags = buffer.tags[(buffer.words[word_x].position + 1)..end].to_vec();
 
-        // Calculate bigram score
-        let scores = self.calculate_bigram_score(&tags, &AFTER_WEIGHTS);
 
-        // Get new highest score
-        let (mut max_tag, mut max_score) =
-            (buffer.words[word_x].tag, buffer.words[word_x].max_score);
-        for (tag, score) in scores.iter() {
-            let mut cur_score: f32 = match buffer.words[word_x].scores.get(tag) {
-                Some(r) => *r,
-                None => continue,
-            };
-            cur_score += score * AFTER_BIGRAM_SCORE;
+    /// Check the tag models
+    fn check_tag_models(&self, position: usize, tokens: &[Token]) -> Option<POSPrediction> {
+        let tag = tokens[position].pos;
 
-            // Check score
-            if cur_score > max_score {
-                max_tag = *tag;
-                max_score = cur_score;
+        // Check tag models
+        if let Some(model_names) = self.tags.tags.get(&tag) {
+            for name in model_names.iter() {
+                let model = self.tags.models.get(&name.to_string()).unwrap();
+
+                // Ensure token is valid for model
+                if !model.target_tags.contains(&tag) { continue; }
+                if !tokens[position].potential_pos.iter().filter(|&p_tag| *p_tag != tag)
+                    .any(|p_tag| model.target_tags.contains(p_tag) ) 
+                { continue; }
+
+                if let Some(pred) = model.predict(position, tokens) {
+                    return Some(pred);
+                }
             }
         }
 
-        // Return
-        if max_tag != buffer.words[word_x].tag {
-            Some(max_tag)
-        } else {
-            None
-        }
+        None
     }
 }
 
-impl ResolvedScore {
-    /// Creates a new ResolvedScore instance with the specified position and default values for other fields.
-    pub fn new(position: usize) -> Self {
+impl POSPrediction {
+    pub fn new(method: POSPredictionMethod, word: &str, prev_tag: POSTag, tag: POSTag, confidence: f32, probabilities: &HashMap<POSTag, f32>, conjunctions: &[String]) -> Self{
         Self {
-            position,
-            ..Default::default()
+            method,
+            word: word.to_string(),
+            prev_tag,
+            tag,
+            confidence,
+            probabilities: probabilities.clone(),
+            conjunctions: conjunctions.to_vec()
         }
     }
 }
 
-impl Buffer {
-    pub fn new(start: usize) -> Self {
-        Self {
-            start,
-            ..Default::default()
-        }
-    }
-}
-
-impl fmt::Debug for ResolvedScore {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let scores_vec = self
-            .scores
-            .iter()
-            .map(|(tag, score)| format!("({} {})", tag.to_str(), score))
-            .collect::<Vec<String>>();
-        write!(
-            f,
-            "Resolved Score:  pos {} tag {} score {}\n",
-            self.position,
-            self.tag.to_str(),
-            self.max_score
-        )?;
-        write!(f, "    scores: {}", scores_vec.join(" ").to_string())
-    }
-}

@@ -1,9 +1,10 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use crate::pos_tagger::POSTag;
+use crate::pos_tagger::{POSTag, POSPrediction};
 use crate::vocab::{
     f8::f8,
     {Pronoun, VocabDatabase},
@@ -29,6 +30,8 @@ pub struct Token {
     #[serde(skip)]
     pub is_negative: bool,
     pub pos: POSTag,
+    #[serde(skip)]
+    pub pos_prediction: POSPrediction,
     #[serde(skip)]
     pub potential_pos: Vec<POSTag>,
     pub categories: Vec<i16>,
@@ -113,9 +116,10 @@ impl Token {
 
     /// Creates an unknown Token with the specified word and default properties.
     pub fn unknown(word: &str) -> Token {
-        let mut token = Self::default();
-        token.word = word.to_string();
-        token
+        Self {
+            word: word.to_string(),
+            ..Default::default()
+        }
     }
 
     /// Creates a Token from a token ID using the vocabulary database, setting its index.
@@ -248,6 +252,11 @@ impl Token {
         self.pos == POSTag::SS
     }
 
+    /// Check if the token is a punctuation mark
+    pub fn is_punctuation(&self) -> bool {
+        self.pos == POSTag::SS || self.pos == POSTag::PUNC
+    }
+
     /// Checks if the Token is a potential phrase splitter (PUNC).
     pub fn is_phrase_splitter(&self) -> bool {
         self.pos == POSTag::PUNC
@@ -280,7 +289,7 @@ impl Token {
         // Go through categories, calculate distance / score
         for cat1 in token1_categories.iter() {
             for cat2 in token2_categories.iter() {
-                let depth = self.get_common_category_depth(&cat1, &cat2);
+                let depth = self.get_common_category_depth(cat1, cat2);
                 //let depth = 1;
                 total_score += depth as f32;
                 comparisons += 1;
@@ -295,7 +304,7 @@ impl Token {
     }
 
     /// Calculates the common depth between two category paths.
-    fn get_common_category_depth(&self, path1: &Vec<i16>, path2: &Vec<i16>) -> usize {
+    fn get_common_category_depth(&self, path1: &[i16], path2: &[i16]) -> usize {
         let mut depth = 0;
         for (p1, p2) in path1.iter().zip(path2.iter()) {
             if p1 == p2 {

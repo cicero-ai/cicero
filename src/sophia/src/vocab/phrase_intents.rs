@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use crate::error::Error;
@@ -29,6 +30,12 @@ pub enum PhraseIntent {
     request,
 }
 
+impl Default for PhraseIntents {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PhraseIntents {
     /// Creates a new phrase intents node
     pub fn new() -> Self {
@@ -39,7 +46,7 @@ impl PhraseIntents {
     }
 
     /// Inserts a phrase into the trie
-    pub fn insert(&mut self, intent: PhraseIntent, tokens: &Vec<Token>) {
+    pub fn insert(&mut self, intent: PhraseIntent, tokens: &[Token]) {
         let mut current = self;
         for token in tokens.iter() {
             current = current.children.entry(token.index).or_insert(Box::new(PhraseIntents::new()));

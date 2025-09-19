@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use super::{Buffer, Token};
@@ -93,7 +94,7 @@ impl TokenCleaner {
     }
 
     /// Classifies a numeric word as a time or general numeric token, pushing it to the buffer.
-    fn classify_numeric(&mut self, word: &String, vocab: &VocabDatabase, buffer: &mut Buffer) {
+    fn classify_numeric(&mut self, word: &str, vocab: &VocabDatabase, buffer: &mut Buffer) {
         if self.is_time() {
             buffer.push_token(Token::special(word, "|time|", "", "", vocab));
         } else {
@@ -104,7 +105,7 @@ impl TokenCleaner {
     /// Classifies a non-numeric token, handling numeric suffixes (e.g., decades, ordinals) and returning the cleaned word or None if fully processed.
     fn classify_token(
         &mut self,
-        word: &String,
+        word: &str,
         vocab: &VocabDatabase,
         buffer: &mut Buffer,
     ) -> Option<String> {
@@ -212,8 +213,8 @@ impl TokenCleaner {
     }
 
     /// Checks if the character sequence represents a decade (e.g., 90s or 1990s).
-    fn is_decade(&self, suffix: &String) -> bool {
-        if suffix.as_str() != "s" {
+    fn is_decade(&self, suffix: &str) -> bool {
+        if suffix != "s" {
             return false;
         }
         let res = &self.chars;
@@ -233,9 +234,6 @@ trait IsCurrencySymbol {
 impl IsCurrencySymbol for char {
     /// Implements `IsCurrencySymbol` for `char`, checking if the character is a currency symbol ($, €, £, ¥).
     fn is_currency_symbol(self) -> bool {
-        match self {
-            '$' | '€' | '£' | '¥' => true,
-            _ => false,
-        }
+        matches!(self, '$' | '€' | '£' | '¥')
     }
 }

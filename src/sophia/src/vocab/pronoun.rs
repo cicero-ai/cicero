@@ -1,6 +1,7 @@
 // Copyright 2025 Aquila Labs of Alberta, Canada <matt@cicero.sh>
-// Licensed under the Functional Source License, Version 1.1 (FSL-1.1)
-// See the full license at: https://cicero.sh/license.txt
+// Licensed under the PolyForm Noncommercial License 1.0.0
+// Commercial use requires a separate license: https://cicero.sh/sophia/
+// License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
 use serde::{Deserialize, Serialize};
@@ -16,7 +17,7 @@ pub struct Pronoun {
 }
 
 /// Defines the category of a pronoun, such as personal, possessive, or indefinite.
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug, Hash)]
 pub enum PronounCategory {
     none,
     personal,
@@ -29,7 +30,7 @@ pub enum PronounCategory {
 }
 
 /// Defines the gender of a pronoun, which can be neutral, male, or female.
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug, Hash)]
 pub enum PronounGender {
     neutral,
     male,
@@ -37,7 +38,7 @@ pub enum PronounGender {
 }
 
 /// Defines the person of a pronoun, which can be neutral, first, second, or third.
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug, Hash)]
 pub enum PronounPerson {
     neutral,
     first,
@@ -46,7 +47,7 @@ pub enum PronounPerson {
 }
 
 /// Defines the number of a pronoun, which can be neutral, singular, or plural.
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug, Hash)]
 pub enum PronounNumber {
     neutral,
     singular,
