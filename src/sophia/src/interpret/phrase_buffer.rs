@@ -134,6 +134,8 @@ impl PhraseBuffer {
 
     /// Adds a pronoun to the buffer, resolving it against antecedents and updating phrase person if applicable.
     pub fn add_pronoun(&mut self, x: usize) {
+        if self.tokens[x].pronoun.is_none() { return; }
+ 
         // Check pronoun category
         let cat = self.tokens[x].pronoun.clone().unwrap().category;
         if ![

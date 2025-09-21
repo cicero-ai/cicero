@@ -235,13 +235,13 @@ impl SpellChecker {
         false
     }
 
-    /// Get frequecny based score
+    /// Get frequency based score
     fn get_frequency_idx(&self, idx: usize, total: usize) -> usize {
         let interval = total / MAX_FREQUENCY;
         if idx == 0 || interval == 0 {
             MAX_FREQUENCY
         } else {
-            MAX_FREQUENCY - (idx / interval)
+            MAX_FREQUENCY.saturating_sub(idx / interval)
         }
     }
     /// Calculate levenshtein distance

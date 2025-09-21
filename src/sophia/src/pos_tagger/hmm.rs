@@ -53,7 +53,7 @@ where
             // Get end position
             end_pos = match tokens[start_pos..].iter().position(|token| token.pos == POSTag::SS) {
                 Some(r) => r + start_pos + 1,
-                None => tokens.len() - 1,
+                None => tokens.len().saturating_sub(1)
             };
             if start_pos >= end_pos {
                 break;
