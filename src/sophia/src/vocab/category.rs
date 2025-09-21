@@ -167,7 +167,6 @@ impl VocabCategoryDatabase {
 
     /// Retrieves the fully qualified names of a category's parent categories.
     pub fn get_fqn(&self, category: &VocabCategory) -> Vec<String> {
-
         let mut names: Vec<String> = Vec::new();
         for parent_id in category.fqn.iter() {
             let parent_name: String = match self.nodes.get(parent_id) {

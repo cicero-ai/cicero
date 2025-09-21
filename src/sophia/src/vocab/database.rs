@@ -76,7 +76,7 @@ impl VocabDatabase {
                 return Err(Error::Save(format!(
                     "Unable to serialize vocabulary data store, {}",
                     e
-                )))
+                )));
             }
         };
         fs::write(filename, &encoded)?;
@@ -94,10 +94,14 @@ impl VocabDatabase {
         }
         let contents = fs::read(&filename)?;
 
-        let mut vocab: VocabDatabase = match bincode::deserialize(&contents[..])
-        {
+        let mut vocab: VocabDatabase = match bincode::deserialize(&contents[..]) {
             Ok(r) => r,
-            Err(e) => return Err(Error::Load(format!("Unable to load the vocabulary file.  Please ensure correct file is in place, and re-download from secure client area if necessary.  Contact customer support if the problem persists.  Error: {}", e)))
+            Err(e) => {
+                return Err(Error::Load(format!(
+                    "Unable to load the vocabulary file.  Please ensure correct file is in place, and re-download from secure client area if necessary.  Contact customer support if the problem persists.  Error: {}",
+                    e
+                )));
+            }
         };
 
         vocab.cache = Mutex::new(VocabCache::load(datadir)?);

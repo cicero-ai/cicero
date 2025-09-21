@@ -4,7 +4,7 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-pub use self::input::{TokenizedInput, MWE};
+pub use self::input::{MWE, TokenizedInput};
 pub use self::token::{Token, TokenType};
 pub use self::tokenizer::{Buffer, Tokenizer};
 pub use cleaner::TokenCleaner;

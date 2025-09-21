@@ -39,7 +39,6 @@ impl f8 {
     fn to_u8(&self) -> u8 {
         self.sum
     }
-
 }
 
 impl From<f32> for f8 {

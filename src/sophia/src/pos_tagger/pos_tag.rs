@@ -271,20 +271,22 @@ impl POSTag {
         }
     }
 
-    /// Convert tag to a shortened version -- used for training 
+    /// Convert tag to a shortened version -- used for training
     /// of cohorts based model to assist with automated spelling corrections.
     pub fn to_short_tag(&self) -> Self {
         match *self {
-            Self::CC|Self::CS|Self::CA => Self::CC,
-            Self::DT|Self::PDT|Self::WDT => Self::DT,
+            Self::CC | Self::CS | Self::CA => Self::CC,
+            Self::DT | Self::PDT | Self::WDT => Self::DT,
             Self::IN => Self::IN,
-            Self::JJ|Self::JJR|Self::JJS => Self::JJ,
-            Self::NN|Self::NNS|Self::NNP|Self::NNPS|Self::NM|Self::NZ => Self::NN,
-            Self::PR|Self::PRP|Self::WPR|Self::WPRP => Self::PR,
-            Self::PUNC|Self::SS => Self::PUNC,
-            Self::RB|Self::RBR|Self::RBS|Self::WRB => Self::RB,
-            Self::VB|Self::VBD|Self::VBG|Self::VBN|Self::VBP|Self::VBZ|Self::MD => Self::VB,
-            _ => Self::FW
+            Self::JJ | Self::JJR | Self::JJS => Self::JJ,
+            Self::NN | Self::NNS | Self::NNP | Self::NNPS | Self::NM | Self::NZ => Self::NN,
+            Self::PR | Self::PRP | Self::WPR | Self::WPRP => Self::PR,
+            Self::PUNC | Self::SS => Self::PUNC,
+            Self::RB | Self::RBR | Self::RBS | Self::WRB => Self::RB,
+            Self::VB | Self::VBD | Self::VBG | Self::VBN | Self::VBP | Self::VBZ | Self::MD => {
+                Self::VB
+            }
+            _ => Self::FW,
         }
     }
 
@@ -301,20 +303,18 @@ impl POSTag {
     /// Check whether the POS tag belongs to a conjunction
     pub fn is_conjunction(&self) -> bool {
         self.to_str().starts_with("C")
-    
-}
+    }
     /// Check whether the POS tag belongs to a base verb
     pub fn is_base_verb(&self) -> bool {
         *self == Self::VB || *self == Self::VBG
     }
-
 
     pub fn is_punctuation(&self) -> bool {
         *self == Self::SS || *self == Self::PUNC
     }
 
     /// Check whether or not tag belongs to a pronoun
-    pub fn is_pronoun(&self) ->bool {
+    pub fn is_pronoun(&self) -> bool {
         *self == Self::PR || *self == Self::PRP
     }
 

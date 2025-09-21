@@ -1,7 +1,7 @@
 [package]
 name = "cicero-sophia"
 description = "High-performance NLU (natural language understanding) engine built in Rust for speed, accuracy, and privacy. "
-version = "0.6.4"
+version = "0.6.5"
 edition = "2024"
 authors = ["Aquila Labs"]
 homepage = "https://cicero.sh/sophia/"

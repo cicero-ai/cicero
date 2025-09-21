@@ -4,28 +4,108 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use std::hash::Hash;
-use serde::{Serialize, Deserialize};
-use std::collections::HashMap;
 use super::{POSTag, TokenKey};
-use crate::tokenizer::Token;
-use crate::vocab::{PronounCategory, PronounPerson, PronounNumber};
 use crate::Error;
+use crate::tokenizer::Token;
+use crate::vocab::{PronounCategory, PronounNumber, PronounPerson};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::hash::Hash;
 
 pub const SIBLING_TAGS_BEFORE: usize = 8;
 pub const SIBLING_TAGS_AFTER: usize = 4;
 
-pub static MODAL_VERBS: &[&str] = &["can", "could", "may", "might", "must", "shall", "should", "will", "would"];
-pub static PASSIVE_INDICATORS: &[&str] = &["am", "are", "be", "been", "being", "is", "was", "were", "get", "gets", "getting", "got", "gotten"];
-pub static AUXILLARY_VERBS: &[&str] = &["am", "are", "be", "been", "being", "can", "could", "did", "do", "does", "doing", "had", "has", "have", "having", "is", "may", "might", "must", "shall", "should", "was", "were", "will", "would"];
+pub static MODAL_VERBS: &[&str] = &[
+    "can", "could", "may", "might", "must", "shall", "should", "will", "would",
+];
+pub static PASSIVE_INDICATORS: &[&str] = &[
+    "am", "are", "be", "been", "being", "is", "was", "were", "get", "gets", "getting", "got",
+    "gotten",
+];
+pub static AUXILLARY_VERBS: &[&str] = &[
+    "am", "are", "be", "been", "being", "can", "could", "did", "do", "does", "doing", "had", "has",
+    "have", "having", "is", "may", "might", "must", "shall", "should", "was", "were", "will",
+    "would",
+];
 pub static PERFECT_TENSE_INDICATORS: &[&str] = &["have", "has", "had", "having"];
-pub static TEMPORAL_ADVERBS: &[&str] = &["now", "then", "today", "yesterday", "tomorrow", "always", "often", "sometimes", "never", "rarely", "usually", "frequently", "seldom", "ever", "already", "yet", "still", "just", "soon", "recently", "lately", "before", "after", "first", "next", "last", "finally", "forever", "briefly"];
+pub static TEMPORAL_ADVERBS: &[&str] = &[
+    "now",
+    "then",
+    "today",
+    "yesterday",
+    "tomorrow",
+    "always",
+    "often",
+    "sometimes",
+    "never",
+    "rarely",
+    "usually",
+    "frequently",
+    "seldom",
+    "ever",
+    "already",
+    "yet",
+    "still",
+    "just",
+    "soon",
+    "recently",
+    "lately",
+    "before",
+    "after",
+    "first",
+    "next",
+    "last",
+    "finally",
+    "forever",
+    "briefly",
+];
 pub static COMMON_ADVERBS: &[&str] = &[
-    "quickly", "slowly", "carefully", "easily", "quietly", "loudly", "clearly", "closely", "simply", "suddenly",
-    "always", "often", "usually", "sometimes", "rarely", "never", "frequently", "occasionally",
-    "very", "too", "quite", "almost", "nearly", "hardly", "barely", "enough",
-    "now", "then", "today", "yesterday", "tomorrow", "soon", "later", "already", "still", "yet",
-    "even", "only", "just", "also", "however", "therefore", "thus", "otherwise", "rather", "indeed"
+    "quickly",
+    "slowly",
+    "carefully",
+    "easily",
+    "quietly",
+    "loudly",
+    "clearly",
+    "closely",
+    "simply",
+    "suddenly",
+    "always",
+    "often",
+    "usually",
+    "sometimes",
+    "rarely",
+    "never",
+    "frequently",
+    "occasionally",
+    "very",
+    "too",
+    "quite",
+    "almost",
+    "nearly",
+    "hardly",
+    "barely",
+    "enough",
+    "now",
+    "then",
+    "today",
+    "yesterday",
+    "tomorrow",
+    "soon",
+    "later",
+    "already",
+    "still",
+    "yet",
+    "even",
+    "only",
+    "just",
+    "also",
+    "however",
+    "therefore",
+    "thus",
+    "otherwise",
+    "rather",
+    "indeed",
 ];
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -45,7 +125,7 @@ pub struct POSConjunction<S> {
     pub tags: HashMap<POSTag, f32>,
     pub weight: f32,
     pub mi_score: f32,
-    pub siblings: Vec<POSFeature<S>>
+    pub siblings: Vec<POSFeature<S>>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
@@ -53,7 +133,7 @@ pub struct POSConjunction<S> {
 pub struct POSFeature<S> {
     pub feature_token: POSFeatureToken<S>,
     pub offset: i8,
-    pub noise_profile: u8
+    pub noise_profile: u8,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
@@ -66,7 +146,7 @@ pub enum POSFeatureToken<S> {
     suffix(POSSuffix),
     pronoun_category(PronounCategory),
     pronoun_person(PronounPerson),
-    pronoun_number(PronounNumber)
+    pronoun_number(PronounNumber),
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
@@ -78,7 +158,7 @@ pub enum POSTagGroup {
     past_verb,
     adverb,
     adjective,
-    pronoun
+    pronoun,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
@@ -88,7 +168,7 @@ pub enum POSWordGroup {
     auxillary_verb,
     perfect_tense_indicator,
     temporal_adverb,
-    common_adverb
+    common_adverb,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
@@ -121,7 +201,7 @@ pub enum POSSuffix {
     ship,
     hood,
     ward,
-    wise
+    wise,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
@@ -170,22 +250,25 @@ pub enum POSPrefix {
     co,
     com,
     con,
-    ex
+    ex,
 }
 
 impl<S> Default for POSContext<S>
-where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
- {
+where
+    S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>,
+    Token: TokenKey<S>,
+{
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<S> POSContext<S> 
-    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+impl<S> POSContext<S>
+where
+    S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>,
+    Token: TokenKey<S>,
 {
-
-        pub fn new() -> Self {
+    pub fn new() -> Self {
         Self(vec![vec![]; SIBLING_TAGS_BEFORE + SIBLING_TAGS_AFTER + 1])
     }
 
@@ -199,7 +282,8 @@ impl<S> POSContext<S>
                 break;
             }
 
-            context.0[SIBLING_TAGS_BEFORE - offset] = POSFeatureToken::build_from_token(&tokens[position-offset]);
+            context.0[SIBLING_TAGS_BEFORE - offset] =
+                POSFeatureToken::build_from_token(&tokens[position - offset]);
         }
 
         // After siblings
@@ -208,14 +292,14 @@ impl<S> POSContext<S>
                 break;
             }
 
-            context.0[SIBLING_TAGS_BEFORE + offset] = POSFeatureToken::build_from_token(&tokens[position + offset]);
+            context.0[SIBLING_TAGS_BEFORE + offset] =
+                POSFeatureToken::build_from_token(&tokens[position + offset]);
         }
 
         context
     }
 
     pub fn iter_ft(&self) -> POSContextIter<'_, S> {
-
         // Get indices
         let start = SIBLING_TAGS_BEFORE + 1;
         let mut indices: Vec<usize> = (0..SIBLING_TAGS_BEFORE).rev().collect();
@@ -225,20 +309,21 @@ impl<S> POSContext<S>
             context: self,
             indices,
             outer_index: 0,
-            inner_index: 0
+            inner_index: 0,
         }
     }
-
 }
 
-impl<S> POSFeature<S> 
-    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+impl<S> POSFeature<S>
+where
+    S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>,
+    Token: TokenKey<S>,
 {
     pub fn new(feature_token: POSFeatureToken<S>, offset: i8, noise_profile: u8) -> POSFeature<S> {
         Self {
             feature_token,
             offset,
-            noise_profile
+            noise_profile,
         }
     }
 
@@ -247,7 +332,7 @@ impl<S> POSFeature<S>
 
         // Get distance weight
         let distance_base = if self.offset < 0 {
-            SIBLING_TAGS_BEFORE as i8 - self.offset.abs() 
+            SIBLING_TAGS_BEFORE as i8 - self.offset.abs()
         } else {
             SIBLING_TAGS_AFTER as i8 - self.offset
         };
@@ -270,15 +355,14 @@ impl<S> POSFeature<S>
     }
 }
 
-impl<S> POSFeatureToken<S> 
-    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>, Token: TokenKey<S>
+impl<S> POSFeatureToken<S>
+where
+    S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'a> Deserialize<'a>,
+    Token: TokenKey<S>,
 {
     // Build all possible feature tokens from a Token struct
     pub fn build_from_token(token: &Token) -> Vec<Self> {
-        let mut res = vec![
-            Self::tag(token.pos), 
-            Self::word(token.get_key())
-        ];
+        let mut res = vec![Self::tag(token.pos), Self::word(token.get_key())];
 
         // Standard tag group
         if let Ok(tag_group) = POSTagGroup::try_from(token) {
@@ -329,12 +413,19 @@ impl<S> POSFeatureToken<S>
 
     /// Whether or not the feature can be used as a primary / anchor feature
     pub fn is_primary(&self) -> bool {
-        matches!(self, Self::tag(_) | Self::tag_group(_) | Self::word_group(_) | Self::word(_))
+        matches!(
+            self,
+            Self::tag(_) | Self::tag_group(_) | Self::word_group(_) | Self::word(_)
+        )
     }
 
     // Convert token into a feature
     pub fn to_feature(&self, offset: usize, noise_profile: u8) -> POSFeature<S> {
-        let f_offset = if offset >= SIBLING_TAGS_BEFORE { (offset - SIBLING_TAGS_BEFORE) as i8 } else { 0_i8 - offset as i8 };
+        let f_offset = if offset >= SIBLING_TAGS_BEFORE {
+            (offset - SIBLING_TAGS_BEFORE) as i8
+        } else {
+            0_i8 - offset as i8
+        };
         POSFeature::new(self.clone(), f_offset, noise_profile)
     }
 
@@ -346,9 +437,11 @@ impl<S> POSFeatureToken<S>
             Self::word_group(word_group) => word_group.is_group(token),
             Self::word(word) => token.get_key() == *word,
             Self::suffix(suffix) => suffix.token_has(token),
-            Self::pronoun_category(category) => token.pronoun.as_ref().unwrap().category == *category,
+            Self::pronoun_category(category) => {
+                token.pronoun.as_ref().unwrap().category == *category
+            }
             Self::pronoun_person(person) => token.pronoun.as_ref().unwrap().person == *person,
-            Self::pronoun_number(number) => token.pronoun.as_ref().unwrap().number == *number
+            Self::pronoun_number(number) => token.pronoun.as_ref().unwrap().number == *number,
         }
     }
 
@@ -359,7 +452,7 @@ impl<S> POSFeatureToken<S>
             POSFeatureToken::tag(_) => 1.6,
             POSFeatureToken::word_group(_) => 1.4,
             POSFeatureToken::tag_group(_) => 1.2,
-            _ => 1.0
+            _ => 1.0,
         }
     }
 }
@@ -367,13 +460,15 @@ impl<S> POSFeatureToken<S>
 impl POSTagGroup {
     /// Check whether or not token exists to group
     pub fn is_group(&self, token: &Token) -> bool {
-        (*self == Self::noun && token.is_noun()) ||
-            (*self == Self::pronoun && token.is_pronoun()) || 
-            (*self == Self::verb && token.is_verb()) || 
-            (*self == Self::base_verb && token.pos == POSTag::VB) || 
-            (*self == Self::current_verb && [POSTag::VBG, POSTag::VBZ].contains(&token.pos)) || 
-            (*self == Self::past_verb && [POSTag::VBD, POSTag::VBP, POSTag::VBN].contains(&token.pos)) || 
-            (*self == Self::adverb && token.is_adverb()) || (*self == Self::adjective && token.is_adjective())
+        (*self == Self::noun && token.is_noun())
+            || (*self == Self::pronoun && token.is_pronoun())
+            || (*self == Self::verb && token.is_verb())
+            || (*self == Self::base_verb && token.pos == POSTag::VB)
+            || (*self == Self::current_verb && [POSTag::VBG, POSTag::VBZ].contains(&token.pos))
+            || (*self == Self::past_verb
+                && [POSTag::VBD, POSTag::VBP, POSTag::VBN].contains(&token.pos))
+            || (*self == Self::adverb && token.is_adverb())
+            || (*self == Self::adjective && token.is_adjective())
     }
 }
 
@@ -383,11 +478,12 @@ impl POSWordGroup {
         let lowered = token.word.to_lowercase();
         let word = lowered.as_str();
 
-        (*self == Self::modal_verb && MODAL_VERBS.contains(&word)) || 
-            (*self == Self::auxillary_verb && AUXILLARY_VERBS.contains(&word)) || 
-            (*self == Self::passive_indicator && PASSIVE_INDICATORS.contains(&word)) || 
-            (*self == Self::perfect_tense_indicator && PERFECT_TENSE_INDICATORS.contains(&word)) || 
-            (*self == Self::temporal_adverb && TEMPORAL_ADVERBS.contains(&word)) || (*self == Self::common_adverb && COMMON_ADVERBS.contains(&word))
+        (*self == Self::modal_verb && MODAL_VERBS.contains(&word))
+            || (*self == Self::auxillary_verb && AUXILLARY_VERBS.contains(&word))
+            || (*self == Self::passive_indicator && PASSIVE_INDICATORS.contains(&word))
+            || (*self == Self::perfect_tense_indicator && PERFECT_TENSE_INDICATORS.contains(&word))
+            || (*self == Self::temporal_adverb && TEMPORAL_ADVERBS.contains(&word))
+            || (*self == Self::common_adverb && COMMON_ADVERBS.contains(&word))
     }
 }
 
@@ -410,7 +506,7 @@ impl TryFrom<&Token> for POSTagGroup {
             t if t.is_adverb() => Self::adverb,
             t if t.is_adjective() => Self::adjective,
             t if t.is_pronoun() => Self::pronoun,
-            _ => return Err(Error::Generic("No tag group available.".to_string()))
+            _ => return Err(Error::Generic("No tag group available.".to_string())),
         };
 
         Ok(res)
@@ -431,7 +527,7 @@ impl TryFrom<&Token> for POSWordGroup {
             _ if PERFECT_TENSE_INDICATORS.contains(&word) => Self::perfect_tense_indicator,
             _ if TEMPORAL_ADVERBS.contains(&word) => Self::temporal_adverb,
             _ if COMMON_ADVERBS.contains(&word) => Self::common_adverb,
-            _ => return Err(Error::Generic("No word group available.".to_string()))
+            _ => return Err(Error::Generic("No word group available.".to_string())),
         };
 
         Ok(res)
@@ -484,7 +580,7 @@ impl TryFrom<&Token> for POSSuffix {
                 return Ok(*suffix_enum);
             }
         }
-        
+
         Err(Error::Generic("No suffix available".to_string()))
     }
 }
@@ -565,18 +661,21 @@ impl TryFrom<&Token> for POSPrefix {
     }
 }
 
-impl<'a, S> Iterator for POSContextIter<'a, S> 
-    where S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'b> Deserialize<'b>, Token: TokenKey<S>
+impl<'a, S> Iterator for POSContextIter<'a, S>
+where
+    S: Default + Clone + Eq + PartialEq + Hash + Serialize + for<'b> Deserialize<'b>,
+    Token: TokenKey<S>,
 {
     type Item = POSFeature<S>;
 
     fn next(&mut self) -> Option<Self::Item> {
-
         //  Update pointer as necessary
         if self.inner_index >= self.context.0[self.indices[self.outer_index]].len() {
             self.inner_index = 0;
             self.outer_index += 1;
-            if self.outer_index >= self.indices.len() { return None; }
+            if self.outer_index >= self.indices.len() {
+                return None;
+            }
 
             while self.context.0[self.indices[self.outer_index]].is_empty() {
                 self.outer_index += 1;
@@ -598,5 +697,3 @@ impl<'a, S> Iterator for POSContextIter<'a, S>
         Some(f_token.to_feature(self.indices[self.outer_index], 0))
     }
 }
-
-

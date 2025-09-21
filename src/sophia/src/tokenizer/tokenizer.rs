@@ -4,7 +4,7 @@
 // License text: https://polyformproject.org/licenses/noncommercial/1.0.0/
 // Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
 
-use super::{Token, TokenCleaner, TokenizedInput, MWE};
+use super::{MWE, Token, TokenCleaner, TokenizedInput};
 use crate::pos_tagger::POSTag;
 use crate::vocab::{MWEType, VocabDatabase};
 use regex::Regex;
@@ -56,7 +56,9 @@ impl Tokenizer {
             }
 
             // Initial check
-            if buffer.prev_tag.as_str() == "|num|" && vocab.preprocess.hashes.contains_key(&word.to_lowercase()) {
+            if buffer.prev_tag.as_str() == "|num|"
+                && vocab.preprocess.hashes.contains_key(&word.to_lowercase())
+            {
                 let (tag, unit) = vocab.preprocess.hashes.get(&word.to_lowercase()).unwrap();
                 buffer.push_token(Token::special(&word, tag, "", unit, vocab));
                 continue;
@@ -85,7 +87,7 @@ impl Tokenizer {
             buffer.push_suffix();
             buffer.suffix.clear();
         }
-//println!("Before word {} index {} tag {}", buffer.output.tokens[47].word, buffer.output.tokens[47].index, buffer.output.tokens[47].pos.to_string()); 
+        //println!("Before word {} index {} tag {}", buffer.output.tokens[47].word, buffer.output.tokens[47].index, buffer.output.tokens[47].pos.to_string());
         // Apply POS tagging
         vocab.words.pos_tagger.apply(&mut buffer.output, vocab);
 
@@ -95,7 +97,8 @@ impl Tokenizer {
     /// Performs initial cleaning of input text, removing non-ASCII characters, leading symbols, and adding newline markers.
     fn initial_clean(&self, input: &str) -> String {
         let re = Regex::new(r"^[\-\_\=\#\@\!]+").unwrap();
-        let result = input.split("\n")
+        let result = input
+            .split("\n")
             .map(|line| format!("{} |NL| ", re.replace(line, " ").trim()))
             .filter(|lc| !lc.is_empty())
             .collect::<Vec<String>>();
